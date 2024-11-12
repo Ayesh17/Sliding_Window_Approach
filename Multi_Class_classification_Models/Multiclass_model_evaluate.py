@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from Multiclass_LSTM_model import LSTMClassifier
 
 # Define the directory for testing CSV files
-test_data_folder = "../Data/test"
+test_data_folder = "../Data15_No_Normalization/test"
 
 # Behavior label mapping
 behavior_mapping = {
@@ -23,7 +23,7 @@ behavior_mapping = {
 }
 
 # Load trained model
-model_path = "lstm_ship_behavior_model_multiclass.pth"
+model_path = "best_lstm_ship_behavior_model_multiclass_15.pth"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = LSTMClassifier(input_size=23, hidden_size=128, num_layers=2, num_classes=len(behavior_mapping))
 model.load_state_dict(torch.load(model_path, map_location=device))

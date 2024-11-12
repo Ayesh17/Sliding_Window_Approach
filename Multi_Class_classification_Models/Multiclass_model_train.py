@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from Multiclass_LSTM_model import LSTMClassifier
 
 # Define directories for training and validation CSV files
-train_data_folder = "../Data/train"
-val_data_folder = "../Data/validation"
+train_data_folder = "../Datsets/Data15_No_Normalization/train"
+val_data_folder = "../Datsets/Data15_No_Normalization/validation"
 
 # Ensure a folder for saving graphs exists
 plots_folder = "plots"
@@ -79,8 +79,9 @@ input_size = X_train.shape[2]  # Number of features
 hidden_size = 128
 num_layers = 2
 num_classes = len(np.unique(y_train))  # Number of unique classes
-num_epochs = 100
+num_epochs = 10
 learning_rate = 0.001
+early_stopping_patience = 10
 
 # Initialize the model, loss function, and optimizer
 model = LSTMClassifier(input_size, hidden_size, num_layers, num_classes)
@@ -91,8 +92,11 @@ optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-# Training loop
+# Training loop with early stopping and best model saving
 train_losses, val_losses, train_accuracies, val_accuracies = [], [], [], []
+best_val_accuracy = 0.0
+best_model_state = None
+epochs_without_improvement = 0
 
 for epoch in range(num_epochs):
     model.train()
@@ -136,9 +140,24 @@ for epoch in range(num_epochs):
           f"Train Loss: {epoch_train_loss:.4f}, Train Accuracy: {epoch_train_accuracy:.4f}, "
           f"Val Loss: {epoch_val_loss:.4f}, Val Accuracy: {epoch_val_accuracy:.4f}")
 
-# Save the trained model
-torch.save(model.state_dict(), "lstm_ship_behavior_model_multiclass.pth")
-print("Model saved as 'lstm_ship_behavior_model_multiclass.pth'")
+    # Check if this is the best model so far
+    if epoch_val_accuracy > best_val_accuracy:
+        best_val_accuracy = epoch_val_accuracy
+        best_model_state = model.state_dict().copy()
+        epochs_without_improvement = 0
+    else:
+        epochs_without_improvement += 1
+
+    # Early stopping condition
+    if epochs_without_improvement >= early_stopping_patience:
+        print(f"Early stopping at epoch {epoch + 1} due to no improvement for {early_stopping_patience} epochs.")
+        break
+
+# Save the best model
+if best_model_state is not None:
+    model.load_state_dict(best_model_state)
+    torch.save(model.state_dict(), "best_lstm_ship_behavior_model_multiclass_15.pth")
+    print("Best model saved as 'best_lstm_ship_behavior_model_multiclass.pth'")
 
 # Plotting
 plt.figure(figsize=(10, 6))
