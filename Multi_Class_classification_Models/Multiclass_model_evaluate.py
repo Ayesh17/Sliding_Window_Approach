@@ -8,8 +8,17 @@ from sklearn.metrics import confusion_matrix, classification_report
 from torch.utils.data import DataLoader, TensorDataset
 from Multiclass_LSTM_model import LSTMClassifier
 
+# Define the dataset variant
+dataset_variant = "Data_No_Normalization"  # Change this variable for each dataset variant
+
 # Define the directory for testing CSV files
-test_data_folder = "../Data15_No_Normalization/test"
+test_data_folder = f"../Datasets/{dataset_variant}/test"
+
+# Define directories for saving results
+confusion_matrices_folder = f"../Results/Confusion_Matrices"
+classification_reports_folder = f"../Results/Classification_Reports"
+os.makedirs(confusion_matrices_folder, exist_ok=True)
+os.makedirs(classification_reports_folder, exist_ok=True)
 
 # Behavior label mapping
 behavior_mapping = {
@@ -23,7 +32,7 @@ behavior_mapping = {
 }
 
 # Load trained model
-model_path = "best_lstm_ship_behavior_model_multiclass_15.pth"
+model_path = f"../Models/lstm_model_{dataset_variant}.pth"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = LSTMClassifier(input_size=23, hidden_size=128, num_layers=2, num_classes=len(behavior_mapping))
 model.load_state_dict(torch.load(model_path, map_location=device))
@@ -97,14 +106,20 @@ print(f"Test Accuracy: {test_accuracy * 100:.2f}%")
 conf_matrix = confusion_matrix(all_labels, all_preds)
 behavior_labels = [behavior_mapping[i] for i in range(len(behavior_mapping))]
 
-# Plot confusion matrix
+# Plot confusion matrix and save
 plt.figure(figsize=(10, 7))
 sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=behavior_labels, yticklabels=behavior_labels)
 plt.title("Confusion Matrix")
 plt.xlabel("Predicted Label")
 plt.ylabel("True Label")
-plt.show()
+confusion_matrix_path = os.path.join(confusion_matrices_folder, f"confusion_matrix_{dataset_variant}.png")
+plt.savefig(confusion_matrix_path)
+print(f"Confusion matrix saved as {confusion_matrix_path}")
+plt.close()
 
-# Classification report
-print("\nClassification Report:")
-print(classification_report(all_labels, all_preds, target_names=behavior_labels))
+# Classification report and save as text file
+classification_report_text = classification_report(all_labels, all_preds, target_names=behavior_labels)
+classification_report_path = os.path.join(classification_reports_folder, f"classification_report_{dataset_variant}.txt")
+with open(classification_report_path, "w") as f:
+    f.write(classification_report_text)
+print(f"Classification report saved as {classification_report_path}")

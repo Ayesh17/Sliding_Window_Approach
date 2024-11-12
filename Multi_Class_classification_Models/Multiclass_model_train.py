@@ -8,13 +8,23 @@ import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, TensorDataset
 from Multiclass_LSTM_model import LSTMClassifier
 
-# Define directories for training and validation CSV files
-train_data_folder = "../Datsets/Data15_No_Normalization/train"
-val_data_folder = "../Datsets/Data15_No_Normalization/validation"
+# Define the dataset variant
+dataset_variant = "Data_No_Normalization"  # Change this variable for each dataset variant
 
-# Ensure a folder for saving graphs exists
-plots_folder = "plots"
-os.makedirs(plots_folder, exist_ok=True)
+# Define directories for training and validation CSV files based on dataset variant
+train_data_folder = f"../Datasets/{dataset_variant}/train"
+val_data_folder = f"../Datasets/{dataset_variant}/validation"
+
+# Ensure folders for saving accuracy and loss plots exist
+accuracy_plots_folder = f"../Plots/Accuracy_plots"
+os.makedirs(accuracy_plots_folder, exist_ok=True)
+
+loss_plots_folder = f"../Plots/Loss_plots"
+os.makedirs(loss_plots_folder, exist_ok=True)
+
+# Ensure a folder for saving models exists
+models_folder = "../Models"
+os.makedirs(models_folder, exist_ok=True)
 
 
 # Load data function
@@ -79,7 +89,7 @@ input_size = X_train.shape[2]  # Number of features
 hidden_size = 128
 num_layers = 2
 num_classes = len(np.unique(y_train))  # Number of unique classes
-num_epochs = 10
+num_epochs = 100
 learning_rate = 0.001
 early_stopping_patience = 10
 
@@ -156,19 +166,20 @@ for epoch in range(num_epochs):
 # Save the best model
 if best_model_state is not None:
     model.load_state_dict(best_model_state)
-    torch.save(model.state_dict(), "best_lstm_ship_behavior_model_multiclass_15.pth")
-    print("Best model saved as 'best_lstm_ship_behavior_model_multiclass.pth'")
+    model_path = os.path.join(models_folder, f"lstm_model_{dataset_variant}.pth")
+    torch.save(model.state_dict(), model_path)
+    print(f"Best model saved as '{model_path}'")
 
 # Plotting
 plt.figure(figsize=(10, 6))
 plt.plot(train_accuracies, label='Train Accuracy')
 plt.plot(val_accuracies, label='Validation Accuracy')
-plt.title('Model Accuracy')
+plt.title(f'Model Accuracy for {dataset_variant}')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
 plt.legend(loc='upper left')
 plt.grid(True)
-accuracy_plot_path = os.path.join(plots_folder, "accuracy_plot_multiclass.png")
+accuracy_plot_path = os.path.join(accuracy_plots_folder, f"accuracy_plot_{dataset_variant}.png")
 plt.savefig(accuracy_plot_path)
 print(f"Accuracy plot saved as {accuracy_plot_path}")
 plt.close()
@@ -176,12 +187,12 @@ plt.close()
 plt.figure(figsize=(10, 6))
 plt.plot(train_losses, label='Train Loss')
 plt.plot(val_losses, label='Validation Loss')
-plt.title('Model Loss')
+plt.title(f'Model Loss for {dataset_variant}')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(loc='upper left')
 plt.grid(True)
-loss_plot_path = os.path.join(plots_folder, "loss_plot_multiclass.png")
+loss_plot_path = os.path.join(loss_plots_folder, f"loss_plot_{dataset_variant}.png")
 plt.savefig(loss_plot_path)
 print(f"Loss plot saved as {loss_plot_path}")
 plt.close()

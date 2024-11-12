@@ -1,0 +1,11 @@
+1) Working Datset -> HMM_data
+2) S_beam_1_frames_removal.py -> Remove any noisy data in the headon folder that has s_beam == 1
+3) Rename HMM_Data/headon_preprocessed to headon and remove existing headon folder
+4) select_1000_files_per_behavior.py -> select 1000 files with the most frames from each behavior and place them in data_preprocessed folder
+5) Working Datset ->  data_preprocessed
+6) train_test_split.py -> split the datset into train/val/test 70%/15%/15%
+7) remove other subfolders except train, validation, and test
+8) Data_preprocessing/ Data_preprocessing_without_normalization -> Select top 500 frames from each file, if don't have 500 padding
+9) Working Dataset -> Data, Data15,Data_No_Normalization
+9) check_file_length.py -> Check whether the updated files have 500 frames and 24 features
+10)
