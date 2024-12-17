@@ -7,7 +7,10 @@ HMM_train_data_noise_preprocessed_mini/*
 HMM_train_data_noiseless_preprocessed/*
 HMM_train_data_noiseless_preprocessed - Copy/*
 HMM_test_data/*
+HMM_data/*
 Train_data/*
 Test_data/*
 Data/*
 Data2/*
+Dataset/*
+Datasets/*

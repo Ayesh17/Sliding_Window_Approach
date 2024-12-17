@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from Multiclass_LSTM_model import LSTMClassifier
 
 # Define the dataset variant
-dataset_variant = "Data_No_Normalization"  # Change this variable for each dataset variant
+dataset_variant = "Data15"  # Change this variable for each dataset variant
 
 # Define the directory for testing CSV files
 test_data_folder = f"../Datasets/{dataset_variant}/test"
@@ -31,10 +31,28 @@ behavior_mapping = {
     6: "overtake"
 }
 
+
+# Detect the number of features from the first test file
+def get_feature_count(folder_path):
+    csv_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".csv")]
+    if not csv_files:
+        raise FileNotFoundError("No CSV files found in the test data folder.")
+
+    # Read the first file to get the number of features
+    df = pd.read_csv(csv_files[0])
+    feature_columns = [col for col in df.columns if col != 'Label']
+    return len(feature_columns)
+
+
+# Get the number of features dynamically
+no_of_features = get_feature_count(test_data_folder)
+print(f"Detected number of features: {no_of_features}")
+
 # Load trained model
 model_path = f"../Models/lstm_model_{dataset_variant}.pth"
+print("Model_path : ", model_path)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = LSTMClassifier(input_size=23, hidden_size=128, num_layers=2, num_classes=len(behavior_mapping))
+model = LSTMClassifier(input_size=no_of_features, hidden_size=128, num_layers=2, num_classes=len(behavior_mapping))
 model.load_state_dict(torch.load(model_path, map_location=device))
 model.to(device)
 model.eval()

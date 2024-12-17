@@ -93,16 +93,21 @@ num_epochs = 100
 learning_rate = 0.001
 early_stopping_patience = 10
 
-# Calculate class weights
+# Calculate dynamic class weights
 unique_classes, class_counts = np.unique(y_train, return_counts=True)
-class_weights = np.ones(len(unique_classes))  # Default weight of 1 for all classes
+total_samples = len(y_train)
+class_weights = total_samples / (len(unique_classes) * class_counts)  # Inverse frequency weighting
 
-# Adjust weight for "Cross" class (replace with the correct class index for "Cross")
-cross_class_index = 1  # Replace this with the actual index of the "Cross" class
-class_weights[cross_class_index] = 2.0  # Example: Assign a higher weight to "Cross"
+
+# Check if a GPU is available and use it
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# Adjust weight for "headon" class
+headon_class_index = 1  # Replace with the actual index of the "headon" class
+class_weights[headon_class_index] *= 0.5  # Reduce the weight for "headon" (tune this factor as needed)
 
 # Convert to PyTorch tensor and move to device
-class_weights_tensor = torch.tensor(class_weights, dtype=torch.float32)
+class_weights_tensor = torch.tensor(class_weights, dtype=torch.float32).to(device)
 
 # Initialize the model, loss function, and optimizer
 model = LSTMClassifier(input_size, hidden_size, num_layers, num_classes)
