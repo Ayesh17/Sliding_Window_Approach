@@ -2,8 +2,8 @@ import os
 import shutil
 
 # Define the root directory
-root_dir = 'HMM_Data'
-output_dir = 'data_preprocessed'
+root_dir = '../HMM_train_data'
+output_dir = '../HMM_train_data_preprocessed'
 
 # List of behavior types (subdirectories)
 behaviors = ['benign', 'block', 'ram', 'cross', 'headon', 'herd', 'overtake']

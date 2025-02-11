@@ -4,8 +4,22 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/Datasets" />
       <excludeFolder url="file://$MODULE_DIR$/HMM_data" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_data - Copy" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_data_test" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_test_data" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_test_data_noise" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_test_data_noiseless" />
       <excludeFolder url="file://$MODULE_DIR$/HMM_train_data_noise" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_train_data_noise_preprocessed" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_train_data_noise_preprocessed - Copy" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_train_data_noise_preprocessed_2" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_train_data_noiseless" />
+      <excludeFolder url="file://$MODULE_DIR$/Original_Dataset" />
       <excludeFolder url="file://$MODULE_DIR$/Preprocessing_Scripts/Dataset" />
+      <excludeFolder url="file://$MODULE_DIR$/Preprocessing_Scripts/HMM_data" />
+      <excludeFolder url="file://$MODULE_DIR$/stationary" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_train_data" />
+      <excludeFolder url="file://$MODULE_DIR$/HMM_train_data_preprocessed" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

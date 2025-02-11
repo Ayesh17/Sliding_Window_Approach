@@ -3,7 +3,8 @@ import shutil
 import random
 
 # Define the root directory for the preprocessed data
-root_dir = '../Datasets/data_preprocessed2'
+# root_dir = '../Datasets/data_preprocessed'
+root_dir = '../HMM_data'
 train_dir = os.path.join(root_dir, 'train')
 val_dir = os.path.join(root_dir, 'validation')
 test_dir = os.path.join(root_dir, 'test')

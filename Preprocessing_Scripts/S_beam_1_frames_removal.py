@@ -1,13 +1,16 @@
 import os
+import shutil
 import pandas as pd
 
 # Base directory and the behavior we are focusing on
 behavior = 'headon'
-input_behavior_dir = os.path.join("HMM_data", behavior, "scenario")
-output_behavior_dir = os.path.join("HMM_data", "headon_preprocessed", "scenario")
+# base_dir = "../HMM_train_data"
+base_dir = "../HMM_test_data"
+input_behavior_dir = os.path.join(base_dir, behavior, "scenario")
+intermediate_behavior_dir = os.path.join(base_dir, f"{behavior}_preprocessed", "scenario")
 
-# Ensure the output directory exists
-os.makedirs(output_behavior_dir, exist_ok=True)
+# Ensure the intermediate directory exists
+os.makedirs(intermediate_behavior_dir, exist_ok=True)
 
 # Column headers for the files (assuming all files have 39 columns)
 column_headers = [
@@ -39,12 +42,18 @@ for file in csv_files:
         # Remove frames where S_BEAM == 1
         data_filtered = data[data['S_BEAM'] != 1]
 
-        # Save the filtered data to the new subfolder
-        output_file_path = os.path.join(output_behavior_dir, file)
+        # Save the filtered data to the intermediate subfolder
+        output_file_path = os.path.join(intermediate_behavior_dir, file)
         data_filtered.to_csv(output_file_path, index=False, header=False)
 
         print(f"Processed file: {file} - Removed {len(data) - len(data_filtered)} frames with S_BEAM == 1")
     else:
         print(f"Skipping {file}: Expected 39 columns, found {data.shape[1]}")
 
-print(f"\nAll files processed. Updated datasets saved in {output_behavior_dir}")
+# Remove the original 'headon' directory
+shutil.rmtree(os.path.join(base_dir, behavior))
+
+# Rename the intermediate directory to 'headon'
+os.rename(os.path.join(base_dir, f"{behavior}_preprocessed"), os.path.join(base_dir, behavior))
+
+print(f"\nProcessing complete. Original '{behavior}' folder replaced with preprocessed data.")

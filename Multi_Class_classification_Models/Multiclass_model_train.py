@@ -4,118 +4,109 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, TensorDataset
-from Multiclass_LSTM_model import LSTMClassifier
+from collections import Counter
+import importlib  # For dynamic imports
 
 # Define the dataset variant
-dataset_variant = "Data15"  # Change this variable for each dataset variant
+dataset_variant = "Data"
+model_type = "lstm"  # Change to "lstm" or "transformer"
+
+# Dynamically import the appropriate model
+if model_type == "lstm":
+    model_module = importlib.import_module("Multiclass_LSTM_model")
+    ModelClass = model_module.LSTMClassifier
+elif model_type == "transformer":
+    model_module = importlib.import_module("Multiclass_Transformer_model")
+    ModelClass = model_module.TransformerClassifier
+else:
+    raise ValueError("Invalid model type. Choose 'lstm' or 'transformer'.")
 
 # Define directories for training and validation CSV files based on dataset variant
 train_data_folder = f"../Datasets/{dataset_variant}/train"
 val_data_folder = f"../Datasets/{dataset_variant}/validation"
 
-# Ensure folders for saving accuracy and loss plots exist
-accuracy_plots_folder = f"../Plots/Accuracy_plots"
-os.makedirs(accuracy_plots_folder, exist_ok=True)
-
-loss_plots_folder = f"../Plots/Loss_plots"
-os.makedirs(loss_plots_folder, exist_ok=True)
-
-# Ensure a folder for saving models exists
-models_folder = "../Models"
-os.makedirs(models_folder, exist_ok=True)
-
-
 # Load data function
-def load_data_from_folder(folder_path, window_size=20, step_size=5):
+def load_data_from_folder(folder_path, window_size=20, step_size=10):
     sequences = []
     labels = []
-
-    # Collect all CSV files in the folder
     csv_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".csv")]
 
     for csv_file in csv_files:
         try:
-            # Read the CSV file into a DataFrame
             df = pd.read_csv(csv_file)
 
-            # Skip files that are empty or don't have the expected 'Label' column
+            # Ensure the dataframe has necessary columns
             if df.empty or 'Label' not in df.columns:
-                print(f"Skipping {csv_file}: File is empty or 'Label' column not found.")
                 continue
 
-            # Extract feature columns (all columns except 'Label')
             feature_columns = [col for col in df.columns if col != 'Label']
-            full_sequence = df[feature_columns].values  # Convert features to a NumPy array
 
-            # Generate sliding windows
+            # Convert all data to float, coercing errors
+            df[feature_columns] = df[feature_columns].apply(pd.to_numeric, errors='coerce')
+
+            # Drop rows with NaN values after conversion
+            df = df.dropna()
+
+            full_sequence = df[feature_columns].values.astype(np.float32)  # Ensure float32
+
             for start in range(0, len(full_sequence) - window_size + 1, step_size):
                 window = full_sequence[start:start + window_size]
-
-                # Skip if window size is not met
                 if window.shape != (window_size, len(feature_columns)):
                     continue
 
-                # Append the window and label
+                window_labels = df['Label'].iloc[start:start + window_size].values
+                majority_label = Counter(window_labels).most_common(1)[0][0]
+
                 sequences.append(window)
-                labels.append(df['Label'].iloc[0])  # Assuming the label is constant
+                labels.append(majority_label)
 
         except Exception as e:
             print(f"Skipping {csv_file}: Unexpected error - {e}")
 
-    return np.array(sequences), np.array(labels)
-
+    return np.array(sequences, dtype=np.float32), np.array(labels, dtype=np.int64)  # Ensure proper dtype
 
 # Load training and validation data
 X_train, y_train = load_data_from_folder(train_data_folder)
 X_val, y_val = load_data_from_folder(val_data_folder)
 
-# Convert data to PyTorch tensors
 X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
 y_train_tensor = torch.tensor(y_train, dtype=torch.long)
 X_val_tensor = torch.tensor(X_val, dtype=torch.float32)
 y_val_tensor = torch.tensor(y_val, dtype=torch.long)
 
-# Create DataLoader for batching
 train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
 val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
 train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
 
 # Set hyperparameters
-input_size = X_train.shape[2]  # Number of features
-print("input_size", input_size)
-hidden_size = 128
+input_size = X_train.shape[2]
+num_classes = len(np.unique(y_train))
+learning_rate = 0.0001
+hidden_size = 128 #128
 num_layers = 2
-num_classes = len(np.unique(y_train))  # Number of unique classes
-num_epochs = 100
-learning_rate = 0.001
-early_stopping_patience = 10
+num_heads = 4
+num_encoder_layers = 2
+dropout = 0.2
 
-# Calculate class weights
-unique_classes, class_counts = np.unique(y_train, return_counts=True)
-class_weights = np.ones(len(unique_classes))  # Default weight of 1 for all classes
+# Instantiate the selected model
+if model_type == "lstm":
+    model = ModelClass(input_size, hidden_size, num_layers, num_classes)
+elif model_type == "transformer":
+    model = ModelClass(input_size, num_classes, num_heads, num_encoder_layers, dim_feedforward=hidden_size, dropout=dropout)
 
-# Adjust weight for "Cross" class (replace with the correct class index for "Cross")
-cross_class_index = 1  # Replace this with the actual index of the "Cross" class
-class_weights[cross_class_index] = 2.0  # Example: Assign a higher weight to "Cross"
-
-# Convert to PyTorch tensor and move to device
-class_weights_tensor = torch.tensor(class_weights, dtype=torch.float32)
-
-# Initialize the model, loss function, and optimizer
-model = LSTMClassifier(input_size, hidden_size, num_layers, num_classes)
-criterion = nn.CrossEntropyLoss(weight=class_weights_tensor)
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-
-# Check if a GPU is available and use it
+# Move model to device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
-criterion = criterion.to(device)
 
-# Training loop with early stopping and best model saving
-train_losses, val_losses, train_accuracies, val_accuracies = [], [], [], []
+# Define loss and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
+# Training loop
+num_epochs = 100
+early_stopping_patience = 10
 best_val_accuracy = 0.0
 best_model_state = None
 epochs_without_improvement = 0
@@ -136,14 +127,9 @@ for epoch in range(num_epochs):
         _, predicted = torch.max(outputs, 1)
         correct_preds += (predicted == labels).sum().item()
 
-    epoch_train_loss = running_loss / len(train_loader.dataset)
-    epoch_train_accuracy = correct_preds / len(train_loader.dataset)
-    train_losses.append(epoch_train_loss)
-    train_accuracies.append(epoch_train_accuracy)
-
-    # Validation loop
-    model.eval()
+    train_accuracy = correct_preds / len(train_loader.dataset)
     val_loss, val_correct = 0.0, 0
+    model.eval()
     with torch.no_grad():
         for sequences, labels in val_loader:
             sequences, labels = sequences.to(device), labels.to(device)
@@ -153,58 +139,23 @@ for epoch in range(num_epochs):
             _, predicted = torch.max(outputs, 1)
             val_correct += (predicted == labels).sum().item()
 
-    epoch_val_loss = val_loss / len(val_loader.dataset)
-    epoch_val_accuracy = val_correct / len(val_loader.dataset)
-    val_losses.append(epoch_val_loss)
-    val_accuracies.append(epoch_val_accuracy)
+    val_accuracy = val_correct / len(val_loader.dataset)
+    print(f"Epoch {epoch + 1}: Train Acc: {train_accuracy:.4f}, Val Acc: {val_accuracy:.4f}")
 
-    print(f"Epoch [{epoch + 1}/{num_epochs}], "
-          f"Train Loss: {epoch_train_loss:.4f}, Train Accuracy: {epoch_train_accuracy:.4f}, "
-          f"Val Loss: {epoch_val_loss:.4f}, Val Accuracy: {epoch_val_accuracy:.4f}")
-
-    # Check if this is the best model so far
-    if epoch_val_accuracy > best_val_accuracy:
-        best_val_accuracy = epoch_val_accuracy
+    if val_accuracy > best_val_accuracy:
+        best_val_accuracy = val_accuracy
         best_model_state = model.state_dict().copy()
         epochs_without_improvement = 0
     else:
         epochs_without_improvement += 1
 
-    # Early stopping condition
     if epochs_without_improvement >= early_stopping_patience:
-        print(f"Early stopping at epoch {epoch + 1} due to no improvement for {early_stopping_patience} epochs.")
+        print("Early stopping...")
         break
 
 # Save the best model
-if best_model_state is not None:
+if best_model_state:
     model.load_state_dict(best_model_state)
-    model_path = os.path.join(models_folder, f"lstm_model_{dataset_variant}.pth")
+    model_path = f"../Models/{model_type}_model_{dataset_variant}.pth"
     torch.save(model.state_dict(), model_path)
-    print(f"Best model saved as '{model_path}'")
-
-# Plotting
-plt.figure(figsize=(10, 6))
-plt.plot(train_accuracies, label='Train Accuracy')
-plt.plot(val_accuracies, label='Validation Accuracy')
-plt.title(f'Model Accuracy for {dataset_variant}')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(loc='upper left')
-plt.grid(True)
-accuracy_plot_path = os.path.join(accuracy_plots_folder, f"accuracy_plot_{dataset_variant}.png")
-plt.savefig(accuracy_plot_path)
-print(f"Accuracy plot saved as {accuracy_plot_path}")
-plt.close()
-
-plt.figure(figsize=(10, 6))
-plt.plot(train_losses, label='Train Loss')
-plt.plot(val_losses, label='Validation Loss')
-plt.title(f'Model Loss for {dataset_variant}')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.legend(loc='upper left')
-plt.grid(True)
-loss_plot_path = os.path.join(loss_plots_folder, f"loss_plot_{dataset_variant}.png")
-plt.savefig(loss_plot_path)
-print(f"Loss plot saved as {loss_plot_path}")
-plt.close()
+    print(f"Saved best model to {model_path}")
