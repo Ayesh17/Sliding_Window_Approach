@@ -53,9 +53,9 @@ def preprocess_and_filter(file_path):
 
         print(f"Read CSV file: {file_path} with shape: {df.shape}")
 
-        # Check if the DataFrame has fewer than 200 rows
+        # Check if the DataFrame has fewer than 150 rows
         if len(df) < 150:
-            print(f"File {file_path} has less than 200 rows. Skipping.")
+            print(f"File {file_path} has less than 150 rows. Skipping.")
             return None
 
         # Ensure 'BEH_LABEL' exists before processing

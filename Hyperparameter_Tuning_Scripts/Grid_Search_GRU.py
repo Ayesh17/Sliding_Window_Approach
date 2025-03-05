@@ -17,10 +17,10 @@ use_bidirectional = False  # Change to True for bidirectional GRU
 
 # Expanded hyperparameter search space
 hyperparameter_grid = {
-    "learning_rate": [0.001],
-    "batch_size": [16],
-    "dropout": [0],
-    "hidden_size": [32, 64]
+    "learning_rate": [0.0001, 0.001],
+    "batch_size": [16, 32, 64],
+    "dropout": [0, 0.2, 0.4],
+    "hidden_size": [32, 64, 128]
 }
 
 # Generate all hyperparameter combinations
@@ -120,7 +120,7 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
         best_train_accuracy = 0.0  # Track best training accuracy
         best_val_accuracy, early_stopping_patience, epochs_without_improvement = 0.0, 10, 0
 
-        for epoch in range(2):  # Increased from 2 to 30
+        for epoch in range(30):  # Increased from 2 to 30
             model.train()
             train_correct, total_train = 0, 0
             for sequences, labels in train_loader:

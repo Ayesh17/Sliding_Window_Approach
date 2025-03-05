@@ -3,8 +3,9 @@ import shutil
 import random
 
 # Define the root directory for the preprocessed data
-# root_dir = '../HMM_train_data'
-root_dir = '../HMM_train_data_preprocessed/hyperparam_tuning'
+root_dir = '../HMM_train_data'
+# root_dir = '../HMM_train_data_preprocessed'
+# root_dir = '../HMM_train_data_preprocessed/hyperparam_tuning'
 train_dir = os.path.join(root_dir, 'train')
 val_dir = os.path.join(root_dir, 'validation')
 
@@ -29,7 +30,7 @@ for behavior in behaviors:
     csv_files = [os.path.join(scenario_dir, f) for f in os.listdir(scenario_dir) if f.endswith('.csv')]
 
     # Calculate the number of files for training and validation (80%, 20%)
-    train_count = int(0.85 * len(csv_files))
+    train_count = int(0.8 * len(csv_files))
     val_count = len(csv_files) - train_count
     # train_count = 170
     # val_count = 30
