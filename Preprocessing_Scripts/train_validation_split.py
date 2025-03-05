@@ -4,7 +4,7 @@ import random
 
 # Define the root directory for the preprocessed data
 # root_dir = '../HMM_train_data'
-root_dir = '../HMM_train_data_preprocessed'
+root_dir = '../HMM_train_data_preprocessed/hyperparam_tuning'
 train_dir = os.path.join(root_dir, 'train')
 val_dir = os.path.join(root_dir, 'validation')
 
@@ -29,8 +29,11 @@ for behavior in behaviors:
     csv_files = [os.path.join(scenario_dir, f) for f in os.listdir(scenario_dir) if f.endswith('.csv')]
 
     # Calculate the number of files for training and validation (80%, 20%)
-    train_count = int(0.8 * len(csv_files))
+    train_count = int(0.85 * len(csv_files))
     val_count = len(csv_files) - train_count
+    # train_count = 170
+    # val_count = 30
+
 
     # Check if there are enough files to split into train and validation sets
     if len(csv_files) < train_count + val_count:
@@ -42,7 +45,7 @@ for behavior in behaviors:
 
     # Split into training and validation sets
     train_files = csv_files[:train_count]
-    val_files = csv_files[train_count:]
+    val_files = csv_files[train_count:train_count+val_count]
 
     # Define destination directories for training and validation for the current behavior
     dest_train_behavior_dir = os.path.join(train_dir, behavior, 'scenario')

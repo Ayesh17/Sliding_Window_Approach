@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, TensorDataset
-from Multiclass_LSTM_model import LSTMClassifier
+from Multiclass_Bidirectional_LSTM_model import LSTMClassifier
 
 # Define the dataset variant
 dataset_variant = "Data15"  # Change this variable for each dataset variant

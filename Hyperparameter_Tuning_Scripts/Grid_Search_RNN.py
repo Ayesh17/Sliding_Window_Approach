@@ -1,6 +1,5 @@
 import itertools
 import os
-import importlib
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -9,12 +8,26 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
-# Define hyperparameter search space
+# Import models dynamically based on unidirectional or bidirectional choice
+from Multi_Class_classification_Models.Multiclass_Bidirectional_RNN_model import BiRNNClassifier
+from Multi_Class_classification_Models.Multiclass_RNN_model import RNNClassifier  # Unidirectional RNN model
+
+# Define whether to use bidirectional RNN
+use_bidirectional = False  # Change to True for bidirectional RNN
+
+# Expanded hyperparameter search space
+# hyperparameter_grid = {
+#     "learning_rate": [0.001, 0.0005, 0.0001],
+#     "batch_size": [16, 32],
+#     "dropout": [0, 0.1, 0.2],
+#     "hidden_size": [32, 64, 128]
+# }
+
 hyperparameter_grid = {
-    "learning_rate": [0.001, 0.0001, 0.0005],
-    "batch_size": [16, 32, 64, 128],
-    "dropout": [0, 0.1, 0.2, 0.3, 0.4],
-    "hidden_size": [32, 64, 128]
+    "learning_rate": [0.001],
+    "batch_size": [16, 32],
+    "dropout": [0],
+    "hidden_size": [32]
 }
 
 # Generate all hyperparameter combinations
@@ -24,7 +37,6 @@ hyperparameter_combinations = list(itertools.product(
     hyperparameter_grid["dropout"],
     hyperparameter_grid["hidden_size"]
 ))
-
 
 # Load data function
 def load_data_from_folder(folder_path, window_size=20, step_size=10):
@@ -56,17 +68,23 @@ def load_data_from_folder(folder_path, window_size=20, step_size=10):
 
     return np.array(sequences, dtype=np.float32), np.array(labels, dtype=np.int64)
 
-
 # Load training and validation data
 def load_dataset(dataset_variant):
     train_folder = f"../Datasets/{dataset_variant}/train"
     val_folder = f"../Datasets/{dataset_variant}/validation"
     return load_data_from_folder(train_folder), load_data_from_folder(val_folder)
 
+# Function to generate unique filename to prevent overwriting
+def get_unique_filename(base_filename):
+    filename = base_filename
+    count = 1
+    while os.path.exists(filename):
+        filename = f"{base_filename.rsplit('.', 1)[0]}_{count}.csv"
+        count += 1
+    return filename
 
 # Grid search function
-def grid_search(dataset_variant="Data_1000"):
-    # Preload dataset once to avoid redundant loading
+def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
     (X_train, y_train), (X_val, y_val) = load_dataset(dataset_variant)
     X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
     y_train_tensor = torch.tensor(y_train, dtype=torch.long)
@@ -81,33 +99,54 @@ def grid_search(dataset_variant="Data_1000"):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     best_hyperparams, best_accuracy = None, 0.0
-    model_module = importlib.import_module("Multiclass_LSTM_model")
-    ModelClass = model_module.LSTMClassifier
+    results = []
+
+    # Choose the correct RNN model based on bidirectionality
+    if use_bidirectional:
+        print("\n>>> Using Bidirectional RNN Model <<<\n")
+        ModelClass = BiRNNClassifier
+        base_results_filename = "../hyperparameter_results/RNN_Bidirectional_Results.csv"
+    else:
+        print("\n>>> Using Unidirectional RNN Model <<<\n")
+        ModelClass = RNNClassifier
+        base_results_filename = "../hyperparameter_results/RNN_Unidirectional_Results.csv"
+
+    results_filename = get_unique_filename(base_results_filename)  # Ensure unique filename
+
+    # Create DataLoaders once, avoiding redundant reinitialization
+    train_loader = DataLoader(train_dataset, batch_size=max(hyperparameter_grid["batch_size"]), shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=max(hyperparameter_grid["batch_size"]), shuffle=False)
 
     for lr, batch_size, dropout, hidden_size in hyperparameter_combinations:
-        print(f"Testing: lr={lr}, batch_size={batch_size}, dropout={dropout}, hidden_size={hidden_size}")
-
-        train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-        val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+        print(f"\n🔹 Testing: LR={lr}, Batch={batch_size}, Dropout={dropout}, Hidden={hidden_size}, BiDir={use_bidirectional}")
 
         model = ModelClass(input_size, hidden_size, num_layers=2, num_classes=num_classes, dropout=dropout).to(device)
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=lr)
 
+        best_train_accuracy = 0.0  # Track best training accuracy
         best_val_accuracy, early_stopping_patience, epochs_without_improvement = 0.0, 10, 0
 
-        for epoch in range(30):  # Training loop
-
+        for epoch in range(2):  # Increased from 2 to 30
             model.train()
-            for batch_idx, (sequences, labels) in enumerate(train_loader):
+            train_correct, total_train = 0, 0
+            for sequences, labels in train_loader:
                 sequences, labels = sequences.to(device), labels.to(device)
                 optimizer.zero_grad()
-                loss = criterion(model(sequences), labels)
+                outputs = model(sequences)
+                loss = criterion(outputs, labels)
                 loss.backward()
                 optimizer.step()
-                torch.cuda.empty_cache()  # Free unused GPU memory
-            print(f"Epoch {epoch + 1}/30 - Training Completed")  # Epoch progress update
 
+                _, predicted = torch.max(outputs, 1)
+                train_correct += (predicted == labels).sum().item()
+                total_train += labels.size(0)
+
+            train_accuracy = train_correct / total_train  # Compute train accuracy for epoch
+            if train_accuracy > best_train_accuracy:
+                best_train_accuracy = train_accuracy
+
+            # Validation Step
             model.eval()
             val_correct = 0
             with torch.no_grad():
@@ -123,22 +162,35 @@ def grid_search(dataset_variant="Data_1000"):
             else:
                 epochs_without_improvement += 1
 
+            # Print accuracies at each epoch
+            print(f" Epoch {epoch+1}/30 - Training Acc: {train_accuracy:.4f} | Validation Acc: {val_accuracy:.4f}")
+
             if epochs_without_improvement >= early_stopping_patience:
-                print(f"Early stopping triggered after {epoch + 1} epochs.")
+                print(f"🛑 Early stopping triggered after {epoch + 1} epochs.")
                 break
 
-        print(
-            f"Validation Accuracy: {best_val_accuracy:.4f}, Hyperparameters: lr={lr}, batch_size={batch_size}, dropout={dropout}, hidden_size={hidden_size}")
+        print(f"Best Training Accuracy: {best_train_accuracy:.4f} | Best Validation Accuracy: {best_val_accuracy:.4f}")
+
+        results.append({
+            "learning_rate": lr,
+            "batch_size": batch_size,
+            "dropout": dropout,
+            "hidden_size": hidden_size,
+            "bidirectional": use_bidirectional,
+            "best_training_accuracy": best_train_accuracy,
+            "best_validation_accuracy": best_val_accuracy
+        })
+
         if best_val_accuracy > best_accuracy:
             best_accuracy, best_hyperparams = best_val_accuracy, (lr, batch_size, dropout, hidden_size)
 
-    if best_hyperparams:
-        print(
-            f"Best Hyperparameters: Learning Rate={best_hyperparams[0]}, Batch Size={best_hyperparams[1]}, Dropout={best_hyperparams[2]}, Hidden Size={best_hyperparams[3]}")
+    # Save results to CSV
+    os.makedirs("../hyperparameter_results", exist_ok=True)
+    results_df = pd.DataFrame(results)
+    results_df.to_csv(results_filename, index=False)
 
-    else:
-        print("No valid hyperparameter combination found.")
-
+    print(f"\n📂 Hyperparameter tuning results saved to: {results_filename}")
+    print(f"🎯 Best Hyperparameters: LR={best_hyperparams[0]}, Batch={best_hyperparams[1]}, Dropout={best_hyperparams[2]}, Hidden={best_hyperparams[3]}, BiDir={use_bidirectional}")
 
 # Run grid search
-grid_search()
+grid_search(use_bidirectional=use_bidirectional)

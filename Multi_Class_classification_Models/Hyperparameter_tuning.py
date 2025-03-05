@@ -5,7 +5,7 @@ import torch.optim as optim
 import numpy as np
 import pandas as pd
 from torch.utils.data import DataLoader, TensorDataset
-from Multiclass_LSTM_model import LSTMClassifier
+from Multiclass_Bidirectional_LSTM_model import LSTMClassifier
 
 # Define directories for training and validation CSV files
 train_data_folder = "../Data15/train"
