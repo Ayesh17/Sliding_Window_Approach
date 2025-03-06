@@ -9,10 +9,10 @@ from collections import Counter
 import importlib
 
 # Select dataset (padded or unpadded)
-dataset_variant = "Data"   # Options: Data (unpadded), Data_1000 (padded)
+dataset_variant = "Data_1000"   # Options: Data (unpadded), Data_1000 (padded)
 
 # Select model type
-model_type = "transformer"  # Options: rnn, gru, lstm, bi_rnn, bi_gru, bi_lstm, transformer
+model_type = "lstm"  # Options: rnn, gru, lstm, bi_rnn, bi_gru, bi_lstm, transformer
 
 # Dynamically Import Model
 model_mapping = {

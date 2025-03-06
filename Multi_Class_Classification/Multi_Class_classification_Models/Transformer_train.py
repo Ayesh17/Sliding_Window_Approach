@@ -176,7 +176,7 @@ def train_transformer_model():
     # 1) Paths to your filtered dataset
     # -------------------------------------------------------------------------
     dataset_variant = "Data_new"  # adjust as needed
-    base_path = "../Datasets"
+    base_path = "../../Datasets"
     train_folder = os.path.join(base_path, dataset_variant, "train_filtered")
     val_folder = os.path.join(base_path, dataset_variant, "validation_filtered")
     test_folder = os.path.join(base_path, dataset_variant, "test_filtered")  # optional

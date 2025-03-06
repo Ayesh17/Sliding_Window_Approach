@@ -6,12 +6,11 @@ import numpy as np
 import pandas as pd
 from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
-import importlib
 from itertools import product
 
 
 # Import models dynamically based on unidirectional or bidirectional choice
-from Multi_Class_classification_Models.Multiclass_Transformer_model import TransformerClassifier
+from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Transformer_model import TransformerClassifier
 
 # Define dataset variant
 dataset_variant = "Data_hyperparam"

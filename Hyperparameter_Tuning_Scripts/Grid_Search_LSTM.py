@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Import models dynamically based on unidirectional or bidirectional choice
-from Multi_Class_classification_Models.Multiclass_Bidirectional_LSTM_model import BiLSTMClassifier
-from Multi_Class_classification_Models.Multiclass_LSTM_model import LSTMClassifier  # Unidirectional LSTM model
+from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Bidirectional_LSTM_model import BiLSTMClassifier
+from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_LSTM_model import LSTMClassifier  # Unidirectional LSTM model
 
 # Define whether to use bidirectional LSTM
 use_bidirectional = True  # bidirectional LSTM : True, unidirectional LSTM : False
