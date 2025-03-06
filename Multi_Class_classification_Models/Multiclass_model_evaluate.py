@@ -9,20 +9,19 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 import importlib  # For dynamic imports
 
-# Choose Model Type (Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer) ===
-model_type = "transformer"  # Example: Use "bi_rnn" for bidirectional RNN
 
-# Define Dataset Variant (Options: Data, Data_1000)
-dataset_variant = "Data"
+# Select Model Type & Dataset Variant
+dataset_variant = "Data_1000"  # Change to "Data_1000" for padded dataset
+model_type = "transformer"  # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
 
-# === Define Directory Paths ===
+# Define Directory Paths
 test_data_folder = f"../Datasets/{dataset_variant}/test"
 confusion_matrices_folder = f"../Results/Confusion_Matrices"
 classification_reports_folder = f"../Results/Classification_Reports"
 os.makedirs(confusion_matrices_folder, exist_ok=True)
 os.makedirs(classification_reports_folder, exist_ok=True)
 
-# === Behavior Label Mapping ===
+# Behavior Label Mapping
 behavior_mapping = {
     0: "benign",
     1: "block",
@@ -33,7 +32,8 @@ behavior_mapping = {
     6: "overtake"
 }
 
-# === Detect the Number of Features ===
+
+# Detect Number of Features
 def get_feature_count(folder_path):
     csv_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".csv")]
     if not csv_files:
@@ -46,7 +46,8 @@ def get_feature_count(folder_path):
 no_of_features = get_feature_count(test_data_folder)
 print(f"Detected number of features: {no_of_features}")
 
-# === Model Mapping for Importing the Right Class ===
+
+# Dynamically Import the Correct Model
 model_mapping = {
     "rnn": "Multiclass_RNN_model.RNNClassifier",
     "bi_rnn": "Multiclass_Bidirectional_RNN_model.BiRNNClassifier",
@@ -60,21 +61,21 @@ model_mapping = {
 if model_type not in model_mapping:
     raise ValueError(f"Invalid model type '{model_type}'. Choose from {list(model_mapping.keys())}")
 
-# === Dynamically Import the Model ===
 module_name, class_name = model_mapping[model_type].rsplit(".", 1)
 model_module = importlib.import_module(f"Multi_Class_classification_Models.{module_name}")
 ModelClass = getattr(model_module, class_name)
 
-# === Define Model Path ===
+
+# Define Model Path & Load Model
 model_path = f"../Models/{model_type}_model_{dataset_variant}.pth"
 print("Model path:", model_path)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# === Instantiate the Correct Model ===
-hidden_size = 128  # Match with training hyperparameters
-num_layers = 2  # Match with training hyperparameters
-dropout = 0.2  # Ensure dropout is set
+# Instantiate Model (Matching Training Parameters)
+hidden_size = 128
+num_layers = 2
+dropout = 0.2
 
 if "rnn" in model_type or "gru" in model_type or "lstm" in model_type:
     model = ModelClass(input_size=no_of_features, hidden_size=hidden_size, num_layers=num_layers, num_classes=len(behavior_mapping), dropout=dropout)
@@ -83,15 +84,15 @@ elif model_type == "transformer":
     model = ModelClass(input_size=no_of_features, num_classes=len(behavior_mapping), d_model=d_model,
                        nhead=num_heads, num_encoder_layers=num_encoder_layers, dim_feedforward=dim_feedforward, dropout=dropout)
 
-
-# === Load the Trained Model Weights ===
+# Load Trained Model Weights
 checkpoint = torch.load(model_path, map_location=device)
 model.load_state_dict(checkpoint)
 model.to(device)
 model.eval()
 print(f"{model_type.upper()} Model loaded successfully.")
 
-# === Load Test Data with Sliding Windows ===
+
+# Load Test Data with Sliding Windows
 def load_data_from_folder(folder_path, window_size=20, step_size=5):
     sequences, labels = [], []
     csv_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".csv")]
@@ -111,9 +112,13 @@ def load_data_from_folder(folder_path, window_size=20, step_size=5):
                 if window.shape != (window_size, len(feature_columns)):
                     continue
 
-                window_labels = df['Label'][start:start + window_size]
-                majority_label = Counter(window_labels).most_common(1)[0][0]
+                window_labels = df['Label'][start:start + window_size].values
 
+                # ✅ Skip sequences containing -1 labels (padded sequences)
+                if (window_labels == -1).any():
+                    continue
+
+                majority_label = Counter(window_labels).most_common(1)[0][0]
                 sequences.append(window)
                 labels.append(majority_label)
 
@@ -122,7 +127,7 @@ def load_data_from_folder(folder_path, window_size=20, step_size=5):
 
     return np.array(sequences), np.array(labels)
 
-# === Load Test Data ===
+# Load Test Data
 X_test, y_test = load_data_from_folder(test_data_folder)
 print(f"Testing data shape: X_test={X_test.shape}, y_test={y_test.shape}")
 
@@ -136,7 +141,8 @@ y_test_tensor = torch.tensor(y_test, dtype=torch.long).to(device)
 test_dataset = TensorDataset(X_test_tensor, y_test_tensor)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
-# === Evaluate the Model ===
+
+# Evaluate Model on Test Data
 all_preds, all_labels = [], []
 with torch.no_grad():
     for sequences, labels in test_loader:
@@ -146,12 +152,13 @@ with torch.no_grad():
         all_preds.extend(predicted.cpu().numpy())
         all_labels.extend(labels.cpu().numpy())
 
-# === Calculate Test Accuracy ===
+# Calculate Test Accuracy
 correct = sum(np.array(all_preds) == np.array(all_labels))
 test_accuracy = correct / len(all_labels)
 print(f"Test Accuracy ({model_type.upper()}): {test_accuracy * 100:.2f}%")
 
-# === Confusion Matrix & Classification Report ===
+
+# Confusion Matrix & Classification Report
 conf_matrix = confusion_matrix(all_labels, all_preds)
 behavior_labels = [behavior_mapping[i] for i in range(len(behavior_mapping))]
 

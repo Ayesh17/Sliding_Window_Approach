@@ -65,16 +65,12 @@ num_encoder_layers = 2
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Grid search hyperparameters
-# learning_rates = [0.0001, 0.0005, 0.001]
-# batch_sizes = [16, 32, 64, 128, 256]
-# dropouts = [0, 0.1, 0.2, 0.3, 0.4]
-
 learning_rates = [0.0001, 0.001]
 batch_sizes = [16, 32, 64]
 dropouts = [0, 0.2, 0.4]
 
 num_epochs = 30
-early_stopping_patience = 10
+early_stopping_patience = 5
 
 # Initialize tracking
 best_val_accuracy = 0.0

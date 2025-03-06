@@ -2,7 +2,7 @@ import os
 import pandas as pd
 
 # Define the directory containing the CSV files
-data_folder = "Data/train"
+data_folder = "../Datasets/Data_1000_new/test"
 # data_folder = "Data/test"
 
 # Collect all CSV files in the data folder (ignoring 'all_sequences_normalized.csv' for now)
@@ -13,7 +13,7 @@ print(f"csv_files {csv_files}")
 
 # Expected rows and columns for each file
 expected_rows = 500
-expected_columns = 24
+expected_columns = 25
 
 # Iterate through each CSV file and print the number of rows and columns
 for csv_file in csv_files:

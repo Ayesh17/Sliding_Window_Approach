@@ -8,13 +8,13 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 import importlib
 
-# Define the dataset variant (options: Data, Data_1000)
-dataset_variant = "Data"
+# Select dataset (padded or unpadded)
+dataset_variant = "Data"   # Options: Data (unpadded), Data_1000 (padded)
 
-# Choose model type (options: rnn, gru, lstm, bi_rnn, bi_gru, bi_lstm, transformer)
-model_type = "transformer"
+# Select model type
+model_type = "transformer"  # Options: rnn, gru, lstm, bi_rnn, bi_gru, bi_lstm, transformer
 
-# Define the module and class names for different models
+# Dynamically Import Model
 model_mapping = {
     "rnn": "Multiclass_RNN_model.RNNClassifier",
     "bi_rnn": "Multiclass_Bidirectional_RNN_model.BiRNNClassifier",
@@ -25,31 +25,26 @@ model_mapping = {
     "transformer": "Multiclass_Transformer_model.TransformerClassifier",
 }
 
-# Validate model type
 if model_type not in model_mapping:
     raise ValueError(f"Invalid model type '{model_type}'. Choose from {list(model_mapping.keys())}")
 
-# Dynamically import the correct model
 module_name, class_name = model_mapping[model_type].rsplit(".", 1)
 model_module = importlib.import_module(f"Multi_Class_classification_Models.{module_name}")
 ModelClass = getattr(model_module, class_name)
 
-# Define directories for training and validation CSV files
+# Define Data Paths
 train_data_folder = f"../Datasets/{dataset_variant}/train"
 val_data_folder = f"../Datasets/{dataset_variant}/validation"
 
-
-# Function to load data with a sliding window approach
+# Function to Load Data
 def load_data_from_folder(folder_path, window_size=20, step_size=10):
-    sequences = []
-    labels = []
+    sequences, labels = [], []
     csv_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) if file.endswith(".csv")]
 
     for csv_file in csv_files:
         try:
             df = pd.read_csv(csv_file)
 
-            # Ensure the dataframe has necessary columns
             if df.empty or 'Label' not in df.columns:
                 continue
 
@@ -58,15 +53,17 @@ def load_data_from_folder(folder_path, window_size=20, step_size=10):
             df = df.dropna()
 
             full_sequence = df[feature_columns].values.astype(np.float32)
+            label_array = df['Label'].values.astype(np.int64)
 
             for start in range(0, len(full_sequence) - window_size + 1, step_size):
                 window = full_sequence[start:start + window_size]
-                if window.shape != (window_size, len(feature_columns)):
+                window_labels = label_array[start:start + window_size]
+
+                # Ensure no invalid labels (-1 from padding)
+                if (window_labels == -1).any():
                     continue
 
-                window_labels = df['Label'].iloc[start:start + window_size].values
                 majority_label = Counter(window_labels).most_common(1)[0][0]
-
                 sequences.append(window)
                 labels.append(majority_label)
 
@@ -76,10 +73,15 @@ def load_data_from_folder(folder_path, window_size=20, step_size=10):
     return np.array(sequences, dtype=np.float32), np.array(labels, dtype=np.int64)
 
 
-# Load training and validation data
+# Load Data
 X_train, y_train = load_data_from_folder(train_data_folder)
 X_val, y_val = load_data_from_folder(val_data_folder)
 
+# Print unique labels to ensure no invalid ones
+print("Unique labels in training set:", np.unique(y_train))
+print("Unique labels in validation set:", np.unique(y_val))
+
+# Convert to PyTorch Tensors
 X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
 y_train_tensor = torch.tensor(y_train, dtype=torch.long)
 X_val_tensor = torch.tensor(X_val, dtype=torch.float32)
@@ -90,7 +92,8 @@ val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
 train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
 
-# Set hyperparameters
+
+# Model Configuration
 input_size = X_train.shape[2]
 num_classes = len(np.unique(y_train))
 learning_rate = 0.0001
@@ -100,23 +103,23 @@ num_heads = 4
 num_encoder_layers = 2
 dropout = 0.2
 
-# Instantiate the selected model
+# Instantiate Model
 if "rnn" in model_type or "gru" in model_type or "lstm" in model_type:
     model = ModelClass(input_size, hidden_size, num_layers, num_classes, dropout=dropout)
 elif "transformer" in model_type:
-    model = ModelClass(input_size, num_classes, num_heads, num_encoder_layers, dim_feedforward=hidden_size,
-                       dropout=dropout)
+    model = ModelClass(input_size, num_classes, num_heads, num_encoder_layers, dim_feedforward=hidden_size, dropout=dropout)
 
-# Move model to device
+# Move Model to GPU (if available)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 
-# Define loss and optimizer
+# Define Loss & Optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
-# Training loop with early stopping
-num_epochs = 2  # Increased for better learning
+
+# Training Loop with Early Stopping
+num_epochs = 100
 early_stopping_patience = 10
 best_val_accuracy = 0.0
 best_model_state = None
@@ -155,7 +158,7 @@ for epoch in range(num_epochs):
     val_accuracy = val_correct / len(val_loader.dataset)
     print(f"Epoch {epoch + 1}: Train Acc: {train_accuracy:.4f}, Val Acc: {val_accuracy:.4f}")
 
-    # Check for early stopping
+    # Check for Early Stopping
     if val_accuracy > best_val_accuracy:
         best_val_accuracy = val_accuracy
         best_model_state = model.state_dict().copy()
@@ -167,10 +170,10 @@ for epoch in range(num_epochs):
         print("Early stopping...")
         break
 
-# Ensure Models directory exists
+
+# Save the Best Model
 os.makedirs("../Models", exist_ok=True)
 
-# Create unique filename if model already exists
 base_model_path = f"../Models/{model_type}_model_{dataset_variant}.pth"
 model_path = base_model_path
 counter = 1
@@ -178,7 +181,7 @@ while os.path.exists(model_path):
     model_path = f"../Models/{model_type}_model_{dataset_variant}_{counter}.pth"
     counter += 1
 
-# Save the best model
+# Save Model
 model.load_state_dict(best_model_state)
 torch.save(model.state_dict(), model_path)
 print(f"Saved best model to {model_path}")

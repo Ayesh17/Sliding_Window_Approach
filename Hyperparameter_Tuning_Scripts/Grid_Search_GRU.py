@@ -13,7 +13,7 @@ from Multi_Class_classification_Models.Multiclass_Bidirectional_GRU_Model import
 from Multi_Class_classification_Models.Multiclass_GRU_Model import GRUClassifier  # Unidirectional GRU model
 
 # Define whether to use bidirectional GRU
-use_bidirectional = False  # Change to True for bidirectional GRU
+use_bidirectional = True  # bidirectional GRU : True, unidirectional GRU : False
 
 # Expanded hyperparameter search space
 hyperparameter_grid = {
@@ -120,7 +120,7 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
         best_train_accuracy = 0.0  # Track best training accuracy
         best_val_accuracy, early_stopping_patience, epochs_without_improvement = 0.0, 10, 0
 
-        for epoch in range(30):  # Increased from 2 to 30
+        for epoch in range(30):
             model.train()
             train_correct, total_train = 0, 0
             for sequences, labels in train_loader:
