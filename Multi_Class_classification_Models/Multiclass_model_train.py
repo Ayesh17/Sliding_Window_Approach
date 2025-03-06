@@ -9,10 +9,10 @@ from collections import Counter
 import importlib
 
 # Define the dataset variant (options: Data, Data_1000)
-dataset_variant = "Data_1000"
+dataset_variant = "Data"
 
-# Choose model type (options: rnn, gru, lstm, bi_rnn, bi_gru, bi_lstm, transforme)
-model_type = "bi_lstm"
+# Choose model type (options: rnn, gru, lstm, bi_rnn, bi_gru, bi_lstm, transformer)
+model_type = "transformer"
 
 # Define the module and class names for different models
 model_mapping = {

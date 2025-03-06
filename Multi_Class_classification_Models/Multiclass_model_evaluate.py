@@ -9,10 +9,10 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 import importlib  # For dynamic imports
 
-# === Choose Model Type: "lstm" or "transformer" ===
-model_type = "lstm"  # Change to "transformer" to switch models
+# Choose Model Type (Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer) ===
+model_type = "transformer"  # Example: Use "bi_rnn" for bidirectional RNN
 
-# === Define Dataset Variant ===
+# Define Dataset Variant (Options: Data, Data_1000)
 dataset_variant = "Data"
 
 # === Define Directory Paths ===
@@ -46,28 +46,45 @@ def get_feature_count(folder_path):
 no_of_features = get_feature_count(test_data_folder)
 print(f"Detected number of features: {no_of_features}")
 
+# === Model Mapping for Importing the Right Class ===
+model_mapping = {
+    "rnn": "Multiclass_RNN_model.RNNClassifier",
+    "bi_rnn": "Multiclass_Bidirectional_RNN_model.BiRNNClassifier",
+    "gru": "Multiclass_GRU_model.GRUClassifier",
+    "bi_gru": "Multiclass_Bidirectional_GRU_Model.BiGRUClassifier",
+    "lstm": "Multiclass_LSTM_model.LSTMClassifier",
+    "bi_lstm": "Multiclass_Bidirectional_LSTM_model.BiLSTMClassifier",
+    "transformer": "Multiclass_Transformer_model.TransformerClassifier",
+}
+
+if model_type not in model_mapping:
+    raise ValueError(f"Invalid model type '{model_type}'. Choose from {list(model_mapping.keys())}")
+
 # === Dynamically Import the Model ===
-if model_type == "lstm":
-    model_module = importlib.import_module("Multiclass_LSTM_model")
-    ModelClass = model_module.LSTMClassifier
-    model_path = f"../Models/lstm_model_{dataset_variant}.pth"
-    hidden_size, num_layers = 128, 2  # Match training values
-    model = ModelClass(input_size=no_of_features, hidden_size=hidden_size, num_layers=num_layers, num_classes=len(behavior_mapping))
+module_name, class_name = model_mapping[model_type].rsplit(".", 1)
+model_module = importlib.import_module(f"Multi_Class_classification_Models.{module_name}")
+ModelClass = getattr(model_module, class_name)
 
-elif model_type == "transformer":
-    model_module = importlib.import_module("Multiclass_Transformer_model")
-    ModelClass = model_module.TransformerClassifier
-    model_path = f"../Models/transformer_model_{dataset_variant}.pth"
-    d_model, num_heads, num_encoder_layers, dim_feedforward, dropout = 4, 2, 2, 128, 0.1
-    model = ModelClass(input_size=no_of_features, num_classes=len(behavior_mapping), d_model=d_model,
-                       nhead=num_heads, num_encoder_layers=num_encoder_layers, dim_feedforward=dim_feedforward, dropout=dropout)
-else:
-    raise ValueError("Invalid model type. Choose 'lstm' or 'transformer'.")
-
+# === Define Model Path ===
+model_path = f"../Models/{model_type}_model_{dataset_variant}.pth"
 print("Model path:", model_path)
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# === Load the Model ===
+# === Instantiate the Correct Model ===
+hidden_size = 128  # Match with training hyperparameters
+num_layers = 2  # Match with training hyperparameters
+dropout = 0.2  # Ensure dropout is set
+
+if "rnn" in model_type or "gru" in model_type or "lstm" in model_type:
+    model = ModelClass(input_size=no_of_features, hidden_size=hidden_size, num_layers=num_layers, num_classes=len(behavior_mapping), dropout=dropout)
+elif model_type == "transformer":
+    d_model, num_heads, num_encoder_layers, dim_feedforward = 4, 2, 2, 128
+    model = ModelClass(input_size=no_of_features, num_classes=len(behavior_mapping), d_model=d_model,
+                       nhead=num_heads, num_encoder_layers=num_encoder_layers, dim_feedforward=dim_feedforward, dropout=dropout)
+
+
+# === Load the Trained Model Weights ===
 checkpoint = torch.load(model_path, map_location=device)
 model.load_state_dict(checkpoint)
 model.to(device)
