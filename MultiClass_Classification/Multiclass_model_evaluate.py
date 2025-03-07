@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Select Model Type & Dataset Variant
+model_type = "lstm"  # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
 dataset_variant = "Data_1000"  # Change to "Data_1000" for padded dataset
-model_type = "transformer"  # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
 
 # Define Directory Paths
 test_data_folder = f"../Datasets/{dataset_variant}/test"

@@ -10,7 +10,7 @@ from itertools import product
 
 
 # Import models dynamically based on unidirectional or bidirectional choice
-from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Transformer_model import TransformerClassifier
+from MultiClass_Classification.MultiClass_classification_Models.Multiclass_Transformer_model import TransformerClassifier
 
 # Define dataset variant
 dataset_variant = "Data_hyperparam"

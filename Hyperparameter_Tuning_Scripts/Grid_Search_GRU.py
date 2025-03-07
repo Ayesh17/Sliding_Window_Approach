@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Import models dynamically based on unidirectional or bidirectional choice
-from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Bidirectional_GRU_Model import BiGRUClassifier
-from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_GRU_Model import GRUClassifier  # Unidirectional GRU model
+from MultiClass_Classification.MultiClass_classification_Models.Multiclass_Bidirectional_GRU_Model import BiGRUClassifier
+from MultiClass_Classification.MultiClass_classification_Models.Multiclass_GRU_Model import GRUClassifier  # Unidirectional GRU model
 
 # Define whether to use bidirectional GRU
 use_bidirectional = False  # bidirectional GRU : True, unidirectional GRU : False

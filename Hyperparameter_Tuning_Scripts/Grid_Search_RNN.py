@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Import models dynamically based on unidirectional or bidirectional choice
-from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Bidirectional_RNN_model import BiRNNClassifier
-from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_RNN_model import RNNClassifier  # Unidirectional RNN model
+from MultiClass_Classification.MultiClass_classification_Models.Multiclass_Bidirectional_RNN_model import BiRNNClassifier
+from MultiClass_Classification.MultiClass_classification_Models.Multiclass_RNN_model import RNNClassifier  # Unidirectional RNN model
 
 # Define whether to use bidirectional RNN
 use_bidirectional = False  # bidirectional RNN : True, unidirectional RNN : False
