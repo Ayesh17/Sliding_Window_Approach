@@ -13,7 +13,7 @@ from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Bid
 from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_LSTM_model import LSTMClassifier  # Unidirectional LSTM model
 
 # Define whether to use bidirectional LSTM
-use_bidirectional = True  # bidirectional LSTM : True, unidirectional LSTM : False
+use_bidirectional = False  # bidirectional LSTM : True, unidirectional LSTM : False
 
 # Expanded hyperparameter search space
 hyperparameter_grid = {

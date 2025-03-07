@@ -13,7 +13,7 @@ from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Bid
 from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_RNN_model import RNNClassifier  # Unidirectional RNN model
 
 # Define whether to use bidirectional RNN
-use_bidirectional = True  # bidirectional RNN : True, unidirectional RNN : False
+use_bidirectional = False  # bidirectional RNN : True, unidirectional RNN : False
 
 # Expanded hyperparameter search space
 hyperparameter_grid = {

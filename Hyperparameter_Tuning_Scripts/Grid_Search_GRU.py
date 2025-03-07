@@ -13,7 +13,7 @@ from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_Bid
 from Multi_Class_Classification.Multi_Class_classification_Models.Multiclass_GRU_Model import GRUClassifier  # Unidirectional GRU model
 
 # Define whether to use bidirectional GRU
-use_bidirectional = True  # bidirectional GRU : True, unidirectional GRU : False
+use_bidirectional = False  # bidirectional GRU : True, unidirectional GRU : False
 
 # Expanded hyperparameter search space
 hyperparameter_grid = {
