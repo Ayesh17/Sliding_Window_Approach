@@ -14,3 +14,4 @@
     7.1) check_file_length.py -> Check whether the updated files have 500 frames and 24 features
 8) Multiclass_model_train.py
 9) Multiclass_model_test.py
+10) convert_to_binary.py *only if you want to convert to binary

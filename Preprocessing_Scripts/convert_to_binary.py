@@ -5,11 +5,11 @@ import pandas as pd
 # source_root = "../Datasets/Data_hyperparam"
 # destination_root = "../Datasets/Binary_Data_hyperparam"
 
-source_root = "../Datasets/Data_1000"
-destination_root = "../Datasets/Binary_Data_1000"
-
 # source_root = "../Datasets/Data_1000"
 # destination_root = "../Datasets/Binary_Data_1000"
+
+source_root = "../Datasets/Data_1000"
+destination_root = "../Datasets/Binary_Data_1000"
 
 # Define the correct mapping from preprocessed labels to binary labels
 preprocessed_label_to_binary = {

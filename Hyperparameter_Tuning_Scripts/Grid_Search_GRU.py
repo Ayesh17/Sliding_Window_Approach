@@ -14,7 +14,7 @@ from MultiClass_Classification.MultiClass_classification_Models.Multiclass_GRU_M
 
 # === TOGGLE BETWEEN BINARY AND MULTICLASS === #
 use_binary_classification = True  # Set to False for multiclass classification
-use_bidirectional = False  # bidirectional GRU : True, unidirectional GRU : False
+use_bidirectional = True  # bidirectional GRU : True, unidirectional GRU : False
 
 # Select dataset based on classification type
 dataset_variant = "Binary_Data_hyperparam" if use_binary_classification else "Data_hyperparam"

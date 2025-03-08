@@ -14,7 +14,7 @@ from MultiClass_Classification.MultiClass_classification_Models.Multiclass_LSTM_
 
 # === TOGGLE BETWEEN BINARY AND MULTICLASS === #
 use_binary_classification = True  # Set to False for multiclass classification
-use_bidirectional = False  # bidirectional LSTM : True, unidirectional LSTM : False
+use_bidirectional = True  # bidirectional LSTM : True, unidirectional LSTM : False
 
 # Select dataset based on classification type
 dataset_variant = "Binary_Data_hyperparam" if use_binary_classification else "Data_hyperparam"
