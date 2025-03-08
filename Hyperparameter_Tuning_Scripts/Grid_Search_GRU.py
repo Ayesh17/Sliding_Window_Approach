@@ -8,12 +8,16 @@ import numpy as np
 from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
-# Import models dynamically based on unidirectional or bidirectional choice
+# Import GRU models dynamically based on unidirectional or bidirectional choice
 from MultiClass_Classification.MultiClass_classification_Models.Multiclass_Bidirectional_GRU_Model import BiGRUClassifier
 from MultiClass_Classification.MultiClass_classification_Models.Multiclass_GRU_Model import GRUClassifier  # Unidirectional GRU model
 
-# Define whether to use bidirectional GRU
+# === TOGGLE BETWEEN BINARY AND MULTICLASS === #
+use_binary_classification = True  # Set to False for multiclass classification
 use_bidirectional = False  # bidirectional GRU : True, unidirectional GRU : False
+
+# Select dataset based on classification type
+dataset_variant = "Binary_Data_hyperparam" if use_binary_classification else "Data_hyperparam"
 
 # Expanded hyperparameter search space
 hyperparameter_grid = {
@@ -62,7 +66,7 @@ def load_data_from_folder(folder_path, window_size=20, step_size=10):
     return np.array(sequences, dtype=np.float32), np.array(labels, dtype=np.int64)
 
 # Load training and validation data
-def load_dataset(dataset_variant):
+def load_dataset():
     train_folder = f"../Datasets/{dataset_variant}/train"
     val_folder = f"../Datasets/{dataset_variant}/validation"
     return load_data_from_folder(train_folder), load_data_from_folder(val_folder)
@@ -77,8 +81,8 @@ def get_unique_filename(base_filename):
     return filename
 
 # Grid search function
-def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
-    (X_train, y_train), (X_val, y_val) = load_dataset(dataset_variant)
+def grid_search(use_bidirectional=False):
+    (X_train, y_train), (X_val, y_val) = load_dataset()
     X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
     y_train_tensor = torch.tensor(y_train, dtype=torch.long)
     X_val_tensor = torch.tensor(X_val, dtype=torch.float32)
@@ -88,7 +92,7 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
     val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
 
     input_size = X_train.shape[2]
-    num_classes = len(np.unique(y_train))
+    num_classes = 2 if use_binary_classification else len(np.unique(y_train))  # Binary = 2, Multiclass = Auto-detect
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     best_hyperparams, best_accuracy = None, 0.0
@@ -98,12 +102,17 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
     if use_bidirectional:
         print("\n>>> Using Bidirectional GRU Model <<<\n")
         ModelClass = BiGRUClassifier
-        base_results_filename = "../hyperparameter_results/GRU_Bidirectional_Results.csv"
+        base_results_filename = "../hyperparameter_results/GRU_Bidirectional"
     else:
         print("\n>>> Using Unidirectional GRU Model <<<\n")
         ModelClass = GRUClassifier
-        base_results_filename = "../hyperparameter_results/GRU_Unidirectional_Results.csv"
+        base_results_filename = "../hyperparameter_results/GRU_Unidirectional"
 
+    # Append "_binary" if using binary classification
+    if use_binary_classification:
+        base_results_filename += "_Binary"
+
+    base_results_filename += "_Results.csv"
     results_filename = get_unique_filename(base_results_filename)  # Ensure unique filename
 
     # Create DataLoaders once, avoiding redundant reinitialization
@@ -117,8 +126,7 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(model.parameters(), lr=lr)
 
-        best_train_accuracy = 0.0  # Track best training accuracy
-        best_val_accuracy, early_stopping_patience, epochs_without_improvement = 0.0, 10, 0
+        best_train_accuracy, best_val_accuracy, early_stopping_patience, epochs_without_improvement = 0.0, 0.0, 10, 0
 
         for epoch in range(30):
             model.train()
@@ -135,7 +143,7 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
                 train_correct += (predicted == labels).sum().item()
                 total_train += labels.size(0)
 
-            train_accuracy = train_correct / total_train  # Compute train accuracy for epoch
+            train_accuracy = train_correct / total_train
             if train_accuracy > best_train_accuracy:
                 best_train_accuracy = train_accuracy
 
@@ -155,14 +163,11 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
             else:
                 epochs_without_improvement += 1
 
-            # Print accuracies at each epoch
-            print(f"Epoch {epoch+1}/30 - Training Acc: {train_accuracy:.4f} | Validation Acc: {val_accuracy:.4f}")
+            print(f" Epoch {epoch+1}/30 - Training Acc: {train_accuracy:.4f} | Validation Acc: {val_accuracy:.4f}")
 
             if epochs_without_improvement >= early_stopping_patience:
                 print(f"🛑 Early stopping triggered after {epoch + 1} epochs.")
                 break
-
-        print(f"Best Training Accuracy: {best_train_accuracy:.4f} | Best Validation Accuracy: {best_val_accuracy:.4f}")
 
         results.append({
             "learning_rate": lr,
@@ -174,16 +179,11 @@ def grid_search(dataset_variant="Data_hyperparam", use_bidirectional=False):
             "best_validation_accuracy": best_val_accuracy
         })
 
-        if best_val_accuracy > best_accuracy:
-            best_accuracy, best_hyperparams = best_val_accuracy, (lr, batch_size, dropout, hidden_size)
-
     # Save results to CSV
     os.makedirs("../hyperparameter_results", exist_ok=True)
-    results_df = pd.DataFrame(results)
-    results_df.to_csv(results_filename, index=False)
+    pd.DataFrame(results).to_csv(results_filename, index=False)
 
     print(f"\n📂 Hyperparameter tuning results saved to: {results_filename}")
-    print(f"🎯 Best Hyperparameters: LR={best_hyperparams[0]}, Batch={best_hyperparams[1]}, Dropout={best_hyperparams[2]}, Hidden={best_hyperparams[3]}, BiDir={use_bidirectional}")
 
 # Run grid search
 grid_search(use_bidirectional=use_bidirectional)

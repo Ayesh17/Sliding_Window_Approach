@@ -8,12 +8,14 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 from itertools import product
 
-
-# Import models dynamically based on unidirectional or bidirectional choice
+# Import Transformer model dynamically
 from MultiClass_Classification.MultiClass_classification_Models.Multiclass_Transformer_model import TransformerClassifier
 
-# Define dataset variant
-dataset_variant = "Data_hyperparam"
+# === TOGGLE BETWEEN BINARY AND MULTICLASS === #
+use_binary_classification = True  # Set to False for multiclass classification
+
+# Select dataset based on classification type
+dataset_variant = "Binary_Data_hyperparam" if use_binary_classification else "Data_hyperparam"
 
 # Define directories for training and validation CSV files
 train_data_folder = f"../Datasets/{dataset_variant}/train"
@@ -58,7 +60,7 @@ val_dataset = TensorDataset(X_val, y_val)
 
 # Model parameters
 input_size = X_train.shape[2]
-num_classes = len(torch.unique(y_train))
+num_classes = 2 if use_binary_classification else len(torch.unique(y_train))
 num_heads = 4
 num_encoder_layers = 2
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -86,7 +88,9 @@ def get_unique_filename(base_filename):
         count += 1
     return filename
 
-results_filename = get_unique_filename(f"../hyperparameter_results/Transformer_Results_{dataset_variant}.csv")
+# Base filename with binary suffix if needed
+base_results_filename = f"../hyperparameter_results/Transformer_Results_{dataset_variant}"
+results_filename = get_unique_filename(base_results_filename + ( "_binary.csv" if use_binary_classification else ".csv"))
 
 # Hyperparameter tuning loop
 for lr, batch_size, dropout in product(learning_rates, batch_sizes, dropouts):
@@ -163,7 +167,7 @@ for lr, batch_size, dropout in product(learning_rates, batch_sizes, dropouts):
 
     # Save best model
     if best_model_state:
-        model_save_path = f"../saved_models/Transformer_Best_{lr}_{batch_size}_{dropout}.pt"
+        model_save_path = f"../saved_models/Transformer_Best_{dataset_variant}_{lr}_{batch_size}_{dropout}.pt"
         os.makedirs("../saved_models", exist_ok=True)
         torch.save(best_model_state, model_save_path)
         print(f"✅ Model saved: {model_save_path}")

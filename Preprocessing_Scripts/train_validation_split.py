@@ -3,8 +3,8 @@ import shutil
 import random
 
 # Define the root directory for the preprocessed data
-root_dir = '../HMM_train_data'
-# root_dir = '../HMM_train_data_preprocessed'
+# root_dir = '../HMM_train_data'
+root_dir = '../HMM_train_data_preprocessed'
 # root_dir = '../HMM_train_data_preprocessed/hyperparam_tuning'
 train_dir = os.path.join(root_dir, 'train')
 val_dir = os.path.join(root_dir, 'validation')

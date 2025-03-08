@@ -39,7 +39,7 @@ for behavior in behaviors:
     csv_files = [f for f in csv_files if count_csv_rows(f) > 150]
 
     # Sort the files by size in descending order and select the top 850 longest files (and select 150 more from test)
-    longest_files = sorted(csv_files, key=os.path.getsize, reverse=True)[:850]
+    longest_files = sorted(csv_files, key=os.path.getsize, reverse=True)[:1500]
 
     # Define the destination directory path for the current behavior
     dest_behavior_dir = os.path.join(output_dir, behavior, 'scenario')

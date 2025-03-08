@@ -16,24 +16,25 @@ column_headers = [
 selected_columns = [
     'dist (m)', 'S_drel_bear', 'r_speed (mps)', 'abs_dheading', 'S_reg_r_b', 'S_reg_b_r', 'cpa_time (s)',
     'cpa_dist (m)', 'rel_r_b', 'S_beam', 'rel_b_r', 'b_sp (mps)', 'r_accel', 'abs_b_r', 'abs_r_b',
-    'r_head (deg)', 'S_drel_bear', 'S_dabs_heading', 'b_head (deg)', 'S_side', 'S_cpa_ddist',
+    'r_head (deg)', 'S_dabs_heading', 'b_head (deg)', 'S_side', 'S_cpa_ddist',
     'S_cpa_t', 'S_accel', 'beh_phase'
 ]
 
 
 # Mapping HII_ID values to new numeric labels
-hii_id_to_label = {
-    6: 2,  # RAM -> 2
-    1: 0,  # BENIGN -> 0
-    8: 1,  # BLOCK -> 1
-    5: 3,  # CROSS -> 3
-    7: 5,  # HERD -> 5
-    4: 6,  # OVERTAKE -> 6
-    3: 4   # HEADON -> 4
-}
+# hii_id_to_label = {
+#     6: 2,  # RAM -> 2
+#     1: 0,  # BENIGN -> 0
+#     8: 1,  # BLOCK -> 1
+#     5: 3,  # CROSS -> 3
+#     7: 5,  # HERD -> 5
+#     4: 6,  # OVERTAKE -> 6
+#     3: 4   # HEADON -> 4
+# }
+
 
 # Ensure output directories exist
-output_root_folder = "../Datasets/Data"
+output_root_folder = "../Datasets/Binary_Data"
 os.makedirs(output_root_folder, exist_ok=True)
 train_output_folder = os.path.join(output_root_folder, "train")
 val_output_folder = os.path.join(output_root_folder, "validation")
