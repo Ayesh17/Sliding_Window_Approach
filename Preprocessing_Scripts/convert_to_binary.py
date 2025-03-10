@@ -2,14 +2,14 @@ import os
 import pandas as pd
 
 # Define source and destination directories
-# source_root = "../Datasets/Data_hyperparam"
-# destination_root = "../Datasets/Binary_Data_hyperparam"
+source_root = "../Datasets/Data"
+destination_root = "../Datasets/Binary_Data"
 
 # source_root = "../Datasets/Data_1000"
 # destination_root = "../Datasets/Binary_Data_1000"
 
-source_root = "../Datasets/Data_1000"
-destination_root = "../Datasets/Binary_Data_1000"
+# source_root = "../Datasets/Data_1000"
+# destination_root = "../Datasets/Binary_Data_1000"
 
 # Define the correct mapping from preprocessed labels to binary labels
 preprocessed_label_to_binary = {

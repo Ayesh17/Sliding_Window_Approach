@@ -14,7 +14,7 @@ from MultiClass_Classification.MultiClass_classification_Models.Multiclass_RNN_m
 
 # === TOGGLE BETWEEN BINARY AND MULTICLASS === #
 use_binary_classification = True  # Set to False for multiclass classification
-use_bidirectional = True  # bidirectional RNN : True, unidirectional RNN : False
+use_bidirectional = False  # bidirectional RNN : True, unidirectional RNN : False
 
 # Select dataset based on classification type
 dataset_variant = "Binary_Data_hyperparam" if use_binary_classification else "Data_hyperparam"

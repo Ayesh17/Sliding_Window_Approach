@@ -3,202 +3,67 @@ import torch
 
 # List of training configurations
 training_configs = [
+    {
+        "dataset_variant": dataset_variant,
+        "model_type": model_type,
+        "hidden_size": hidden_size,
+        "dropout": dropout,
+        "learning_rate": learning_rate,
+        "batch_size": batch_size
+    }
+    for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
+    for model_type, hidden_size, dropout, learning_rate, batch_size in [
+        # RNN
+        ("rnn", 128, 0, 0.0001, 32),
+        ("rnn", 128, 0.2, 0.0001, 16),
+        ("rnn", 128, 0.4, 0.0001, 64),
+        ("rnn", 128, 0.4, 0.0001, 32),
+        ("rnn", 128, 0.4, 0.0001, 16),
 
+        # Bi-RNN
+        ("bi_rnn", 128, 0.2, 0.0001, 16),
+        ("bi_rnn", 128, 0.2, 0.0001, 64),
+        ("bi_rnn", 128, 0.2, 0.0001, 32),
+        ("bi_rnn", 128, 0.4, 0.0001, 32),
+        ("bi_rnn", 128, 0.4, 0.0001, 16),
 
-    # BI-GRU Cases
-    *[
-        {
-            "model_type": "bi_gru",
-            "dataset_variant": dataset_variant,
-            "hidden_size": 128,
-            "dropout": dropout,
-            "learning_rate": 0.0001,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Data"]
-        for dropout, batch_size in [(0.0, 64)]
-    ],
+        # GRU
+        ("gru", 128, 0, 0.0001, 32),
+        ("gru", 128, 0.4, 0.0001, 64),
+        ("gru", 128, 0.4, 0.0001, 16),
+        ("gru", 128, 0.4, 0.0001, 32),
+        ("gru", 128, 0.2, 0.0001, 32),
 
-    # LSTM Cases
-    *[
-        {
-            "model_type": "lstm",
-            "dataset_variant": dataset_variant,
-            "hidden_size": hidden_size,
-            "dropout": dropout,
-            "learning_rate": learning_rate,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Data"]
-        for hidden_size, dropout, learning_rate, batch_size in [
-            (128, 0.0, 0.001, 32),
-            (64, 0.2, 0.001, 32),
-            (128, 0.0, 0.001, 64),
-            (128, 0.2, 0.001, 64),
-            (64, 0.2, 0.0001, 64),
-        ]
-    ],
+        # Bi-GRU
+        ("bi_gru", 128, 0.2, 0.0001, 16),
+        ("bi_gru", 128, 0, 0.0001, 16),
+        ("bi_gru", 128, 0.4, 0.0001, 16),
+        ("bi_gru", 128, 0.2, 0.0001, 32),
+        ("bi_gru", 128, 0.4, 0.0001, 32),
 
-    # BI-LSTM Cases
-    *[
-        {
-            "model_type": "bi_lstm",
-            "dataset_variant": dataset_variant,
-            "hidden_size": hidden_size,
-            "dropout": dropout,
-            "learning_rate": learning_rate,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Data_1000", "Data"]
-        for hidden_size, dropout, learning_rate, batch_size in [
-            (64, 0.2, 0.001, 32),
-            (128, 0.4, 0.0001, 64),
-            (128, 0.2, 0.001, 32),
-            (32, 0.4, 0.001, 16),
-            (128, 0.4, 0.001, 32),
-        ]
-    ],
+        # LSTM
+        ("lstm", 128, 0, 0.001, 64),
+        ("lstm", 128, 0.4, 0.001, 16),
+        ("lstm", 128, 0.2, 0.001, 64),
+        ("lstm", 128, 0.2, 0.001, 32),
+        ("lstm", 64, 0.2, 0.001, 64),
 
-    # Transformer Cases (No hidden_size)
-    *[
-        {
-            "model_type": "transformer",
-            "dataset_variant": dataset_variant,
-            "dropout": dropout,
-            "learning_rate": learning_rate,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Data_1000", "Data"]
-        for dropout, learning_rate, batch_size in [
-            (0.0, 0.001, 16),
-            (0.0, 0.001, 64),
-            (0.0, 0.0001, 16),
-            (0.2, 0.001, 32),
-            (0.0, 0.001, 32),
-        ]
-    ],
+        # Bi-LSTM
+        ("bi_lstm", 64, 0.2, 0.001, 32),
+        ("bi_lstm", 128, 0, 0.001, 16),
+        ("bi_lstm", 128, 0.2, 0.001, 16),
+        ("bi_lstm", 64, 0, 0.001, 64),
+        ("bi_lstm", 64, 0.4, 0.001, 64),
 
-
-
-
-    ###############################
-    # Binary Classification
-    # RNN Cases
-    *[
-        {
-            "model_type": "rnn",
-            "dataset_variant": dataset_variant,
-            "hidden_size": 128,
-            "dropout": dropout,
-            "learning_rate": 0.0001,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for dropout, batch_size in [(0.2, 64), (0.2, 32), (0.4, 32), (0.4, 64), (0.0, 64)]
-    ],
-
-    # BI_RNN Cases
-    *[
-        {
-            "model_type": "bi_rnn",
-            "dataset_variant": dataset_variant,
-            "hidden_size": 128,
-            "dropout": dropout,
-            "learning_rate": 0.0001,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for dropout, batch_size in [(0.4, 16), (0.2, 32), (0.2, 16), (0.2, 64), (0.0, 64)]
-    ],
-
-    # GRU Cases
-    *[
-        {
-            "model_type": "gru",
-            "dataset_variant": dataset_variant,
-            "hidden_size": 128,
-            "dropout": dropout,
-            "learning_rate": 0.0001,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for dropout, batch_size in [(0.2, 16), (0.4, 16), (0.2, 32), (0.2, 64), (0.4, 64)]
-    ],
-
-    # BI-GRU Cases
-    *[
-        {
-            "model_type": "bi_gru",
-            "dataset_variant": dataset_variant,
-            "hidden_size": 128,
-            "dropout": dropout,
-            "learning_rate": 0.0001,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for dropout, batch_size in [(0.4, 32), (0.4, 64), (0.2, 64), (0.0, 32), (0.0, 64)]
-    ],
-
-    # LSTM Cases
-    *[
-        {
-            "model_type": "lstm",
-            "dataset_variant": dataset_variant,
-            "hidden_size": hidden_size,
-            "dropout": dropout,
-            "learning_rate": learning_rate,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for hidden_size, dropout, learning_rate, batch_size in [
-            (128, 0.0, 0.001, 32),
-            (64, 0.2, 0.001, 32),
-            (128, 0.0, 0.001, 64),
-            (128, 0.2, 0.001, 64),
-            (64, 0.2, 0.0001, 64),
-        ]
-    ],
-
-    # BI-LSTM Cases
-    *[
-        {
-            "model_type": "bi_lstm",
-            "dataset_variant": dataset_variant,
-            "hidden_size": hidden_size,
-            "dropout": dropout,
-            "learning_rate": learning_rate,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for hidden_size, dropout, learning_rate, batch_size in [
-            (64, 0.2, 0.001, 32),
-            (128, 0.4, 0.0001, 64),
-            (128, 0.2, 0.001, 32),
-            (32, 0.4, 0.001, 16),
-            (128, 0.4, 0.001, 32),
-        ]
-    ],
-
-    # Transformer Cases (No hidden_size)
-    *[
-        {
-            "model_type": "transformer",
-            "dataset_variant": dataset_variant,
-            "dropout": dropout,
-            "learning_rate": learning_rate,
-            "batch_size": batch_size,
-        }
-        for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-        for dropout, learning_rate, batch_size in [
-            (0.0, 0.001, 16),
-            (0.0, 0.001, 64),
-            (0.0, 0.0001, 16),
-            (0.2, 0.001, 32),
-            (0.0, 0.001, 32),
-        ]
-    ],
-
+        # Transformer
+        ("transformer", None, 0, 0.001, 16),
+        ("transformer", None, 0, 0.0001, 16),
+        ("transformer", None, 0.2, 0.001, 16),
+        ("transformer", None, 0, 0.001, 32),
+        ("transformer", None, 0, 0.001, 64)
+    ]
 ]
+
 
 # Path to the training script (Fixing backslashes for Windows)
 training_script = r"Multiclass_Classification/Multiclass_model_train.py"

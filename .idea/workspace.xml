@@ -5,15 +5,118 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7342acfc-938e-449b-872f-9d5c88030718" name="Changes" comment="Commit 1">
-      <change afterPath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_GRU_temp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_LSTM_temp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_RNN_copy.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.2.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Binary_hyperparameter_tuning_results_comparison.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_10.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_10.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_1000_1.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_1000_2.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_1000_3.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_1000_4.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_1000_5.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_6.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_7.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_8.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_lstm_model_Data_9.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Binary_Data_1000_1.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Binary_Data_1000_2.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Binary_Data_1000_3.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_10.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_1000_1.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_1000_2.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_1000_3.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_1000_4.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_1000_5.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_6.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_7.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_8.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/lstm_model_Data_9.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/rnn_model_Binary_Data_1000_1.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/rnn_model_Binary_Data_1000_2.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/rnn_model_Binary_Data_1000_3.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/rnn_model_Binary_Data_1000_4.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/rnn_model_Binary_Data_1000_5.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Models/rnn_model_Binary_Data_1000_6.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MultiClass_Classification/Multiclass_Multiple_model_evaluation.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Preprocessing_Scripts/fix_column_repeat_issue.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/bi_rnn_model_Data_1000_1.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/bi_rnn_model_Data_1000_2.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/bi_rnn_model_Data_6.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/bi_rnn_model_Data_7.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/classification_report_bi_rnn_Data.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/rnn_model_Data_1000_1.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/rnn_model_Data_1000_2.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/rnn_model_Data_6.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Classification_Reports/rnn_model_Data_7.pth_report.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Results/Confusion_Matrices/confusion_matrix_bi_rnn_Data.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_32_0.2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_32_0.4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_32_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_64_0.2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_64_0.4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_64_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_16_0.2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_16_0.4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_16_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_32_0.2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_32_0.4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_32_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_64_0.2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_64_0.4.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.001_64_0.pt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Compariosn_grid.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hyperparameter_Tuning_Results_BIGRU.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hyperparameter_Tuning_Results_BIRNN.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_GRU.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_GRU.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_LSTM.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_LSTM.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_RNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts/Grid_Search_RNN.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_1.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_1.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_2.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_2.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_3.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_3.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_4.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_4.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_5.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_1000_5.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_6.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_6.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_7.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_7.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_8.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_8.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_gru_model_Data_9.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_gru_model_Data_9.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_10.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_10.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_1.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_1.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_2.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_2.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_3.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_3.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_4.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_4.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_5.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_1000_5.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_6.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_6.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_7.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_7.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_8.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_8.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/bi_rnn_model_Data_9.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/bi_rnn_model_Data_9.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_10.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_10.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_1000_1.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_1000_1.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_1000_2.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_1000_2.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_1000_3.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_1000_3.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_1000_4.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_1000_4.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_1000_5.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_1000_5.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_6.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_6.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_7.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_7.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_8.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_8.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/gru_model_Data_9.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/gru_model_Data_9.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_10.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_10.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_1000_1.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_1000_1.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_1000_2.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_1000_2.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_1000_3.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_1000_3.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_1000_4.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_1000_4.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_1000_5.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_1000_5.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_6.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_6.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_7.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_7.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_8.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_8.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Models/rnn_model_Data_9.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Models/rnn_model_Data_9.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MultiClass_Classification/Multiclass_model_evaluate.py" beforeDir="false" afterPath="$PROJECT_DIR$/MultiClass_Classification/Multiclass_model_evaluate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MultiClass_Classification/Multiple_models_train.py" beforeDir="false" afterPath="$PROJECT_DIR$/MultiClass_Classification/Multiple_models_train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Preprocessing_Scripts/Instructions" beforeDir="false" afterPath="$PROJECT_DIR$/Preprocessing_Scripts/Instructions" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Preprocessing_Scripts/convert_to_binary.py" beforeDir="false" afterPath="$PROJECT_DIR$/Preprocessing_Scripts/convert_to_binary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Results/Classification_Reports/classification_report_rnn_Data_1000.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Results/Classification_Reports/classification_report_rnn_Data_1000.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Results/Confusion_Matrices/confusion_matrix_rnn_Data_1000.png" beforeDir="false" afterPath="$PROJECT_DIR$/Results/Confusion_Matrices/confusion_matrix_rnn_Data_1000.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.2.pt" beforeDir="false" afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.2.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.pt" beforeDir="false" afterPath="$PROJECT_DIR$/saved_models/Transformer_Best_Binary_Data_hyperparam_0.0001_16_0.pt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +172,7 @@
     "Python.Grid_Search_RNN.executor": "Run",
     "Python.Grid_search_transformers.executor": "Run",
     "Python.LSTM_train.executor": "Run",
+    "Python.Multiclass_Multiple_model_evaluation.executor": "Run",
     "Python.Multiclass_Transformer_model.executor": "Run",
     "Python.Multiclass_model_evaluate.executor": "Run",
     "Python.Multiclass_model_train.executor": "Run",
@@ -79,6 +183,7 @@
     "Python.Unnamed (1).executor": "Run",
     "Python.convert_to_binary.executor": "Run",
     "Python.file_restructure.executor": "Run",
+    "Python.fix_column_repeat_issue.executor": "Run",
     "Python.main.executor": "Run",
     "Python.preprocessing_benign_frames.executor": "Run",
     "Python.rename_for_noiseless.executor": "Run",
@@ -260,7 +365,8 @@
       <workItem from="1741317744353" duration="11886000" />
       <workItem from="1741394497385" duration="26000" />
       <workItem from="1741398465190" duration="17000" />
-      <workItem from="1741398571398" duration="4967000" />
+      <workItem from="1741398571398" duration="13566000" />
+      <workItem from="1741635515307" duration="8312000" />
     </task>
     <task id="LOCAL-00001" summary="Commit 1">
       <created>1716322017275</created>
@@ -281,21 +387,23 @@
     <option name="LAST_COMMIT_MESSAGE" value="Commit 1" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_search_transformers.coverage" NAME="Grid_search_transformers Coverage Results" MODIFIED="1741402615780" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Multiclass_Multiple_model_evaluation.coverage" NAME="Multiclass_Multiple_model_evaluation Coverage Results" MODIFIED="1741644345727" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MultiClass_Classification" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_search_transformers.coverage" NAME="Grid_search_transformers Coverage Results" MODIFIED="1741404652295" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Check_file_length.coverage" NAME="Check_file_length Coverage Results" MODIFIED="1741225581544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
-    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$convert_to_binary.coverage" NAME="convert_to_binary Coverage Results" MODIFIED="1741401981597" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$convert_to_binary.coverage" NAME="convert_to_binary Coverage Results" MODIFIED="1741405295053" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$file_restructure.coverage" NAME="file_restructure Coverage Results" MODIFIED="1741399318968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search.coverage" NAME="Grid_Search Coverage Results" MODIFIED="1740785903179" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Multi_Class_classification_Models" />
-    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Multiclass_model_evaluate.coverage" NAME="Multiclass_model_evaluate Coverage Results" MODIFIED="1741318974676" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MultiClass_Classification" />
-    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search_LSTM.coverage" NAME="Grid_Search_LSTM Coverage Results" MODIFIED="1741402587473" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search_LSTM.coverage" NAME="Grid_Search_LSTM Coverage Results" MODIFIED="1741549699579" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Multiclass_model_evaluate.coverage" NAME="Multiclass_model_evaluate Coverage Results" MODIFIED="1741645372005" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/MultiClass_Classification" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Padding.coverage" NAME="Padding Coverage Results" MODIFIED="1741225421652" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$train_validation_split.coverage" NAME="train_validation_split Coverage Results" MODIFIED="1741399629809" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
-    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search_GRU.coverage" NAME="Grid_Search_GRU Coverage Results" MODIFIED="1741402553542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search_GRU.coverage" NAME="Grid_Search_GRU Coverage Results" MODIFIED="1741549689789" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$transformer_model.coverage" NAME="transformer_model Coverage Results" MODIFIED="1738095991879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Multi_Class_classification_Models" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$fix_column_repeat_issue.coverage" NAME="fix_column_repeat_issue Coverage Results" MODIFIED="1741405261057" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$select_1000_files_per_behavior.coverage" NAME="select_1000_files_per_behavior Coverage Results" MODIFIED="1741399473961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$preprocessing_benign_frames.coverage" NAME="preprocessing_benign_frames Coverage Results" MODIFIED="1741398594823" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Multiclass_Transformer_model.coverage" NAME="Multiclass_Transformer_model Coverage Results" MODIFIED="1739239872182" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Multi_Class_classification_Models" />
-    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search_RNN.coverage" NAME="Grid_Search_RNN Coverage Results" MODIFIED="1741402527141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
+    <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Grid_Search_RNN.coverage" NAME="Grid_Search_RNN Coverage Results" MODIFIED="1741549679086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Hyperparameter_Tuning_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$train_test_split.coverage" NAME="train_test_split Coverage Results" MODIFIED="1734484189440" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Preprocessing_Scripts" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$LSTM_train.coverage" NAME="LSTM_train Coverage Results" MODIFIED="1735330526907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Multi_Class_classification_Models" />
     <SUITE FILE_PATH="coverage/Sliding_Window_Approach$Multiclass_model_train.coverage" NAME="Multiclass_model_train Coverage Results" MODIFIED="1741313288504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Multi_Class_Classification" />
