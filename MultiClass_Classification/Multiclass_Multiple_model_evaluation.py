@@ -84,6 +84,22 @@ def load_data_from_files(file_list, window_size=20, step_size=5):
     return np.array(sequences), np.array(labels)
 
 
+# Function to generate and save the confusion matrix
+def save_confusion_matrix(y_true, y_pred, model_type):
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=behavior_mapping.values(), yticklabels=behavior_mapping.values())
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title(f"Confusion Matrix - {model_type}")
+
+    # Save the confusion matrix image
+    cm_path = os.path.join(confusion_matrices_folder, f"{model_type}_confusion_matrix.png")
+    plt.savefig(cm_path)
+    plt.close()
+    print(f"Confusion matrix saved at {cm_path}")
+
+
 # Initialize Results Storage
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -139,6 +155,9 @@ def evaluate_model(model_type):
             all_preds.extend(predicted.cpu().numpy())
             all_labels.extend(labels.cpu().numpy())
 
+    # Save confusion matrix
+    save_confusion_matrix(all_labels, all_preds, model_type)
+
     # Compute Metrics
     accuracy = accuracy_score(all_labels, all_preds)
     precision = precision_score(all_labels, all_preds, average='weighted', zero_division=0)
@@ -153,7 +172,8 @@ def evaluate_model(model_type):
 
     # Save classification report
     report = classification_report(all_labels, all_preds, target_names=list(behavior_mapping.values()), zero_division=0)
-    with open(os.path.join(classification_reports_folder, f"{model_type}_report.txt"), "w") as f:
+    report_path = os.path.join(classification_reports_folder, f"{model_type}_report.txt")
+    with open(report_path, "w") as f:
         f.write(report)
 
     print(f"Results for {model_type.upper()} saved.")

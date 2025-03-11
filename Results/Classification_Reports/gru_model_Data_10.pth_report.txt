@@ -1,0 +1,13 @@
+              precision    recall  f1-score   support
+
+      benign       1.00      0.55      0.71    745009
+       block       0.44      0.99      0.61    210279
+         ram       0.85      0.82      0.83     86108
+       cross       0.64      0.78      0.70     50317
+      headon       0.84      0.77      0.80     40484
+        herd       0.89      1.00      0.94    489851
+    overtake       0.83      0.93      0.88     98436
+
+    accuracy                           0.78   1720484
+   macro avg       0.78      0.83      0.78   1720484
+weighted avg       0.87      0.78      0.78   1720484
