@@ -39,7 +39,7 @@ behavior_mapping = {
 }
 
 # Define Model Path & Load Model
-model_path = f"../Models/{model_type}_model_{dataset_variant}_6.pth"
+model_path = f"../Models/{model_type}_model_{dataset_variant}_2.pth"
 print("Model path:", model_path)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
