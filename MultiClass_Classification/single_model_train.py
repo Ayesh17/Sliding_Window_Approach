@@ -121,7 +121,7 @@ criterion = nn.CrossEntropyLoss(ignore_index=-1)
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 # ✅ Training loop with early stopping
-num_epochs = 10
+num_epochs = 100
 early_stopping_patience = 10
 best_val_accuracy = 0.0
 best_model_state = None
@@ -189,9 +189,17 @@ if best_model_state:
     models_dir = os.path.join(base_dir, "Models")
     os.makedirs(models_dir, exist_ok=True)
 
-    model_path = os.path.join(models_dir, f"{model_type}_model_{dataset_variant}.pth")
+    # 🔹 Base model file name
+    base_model_name = f"{model_type}_model_{dataset_variant}"
+    model_path = os.path.join(models_dir, f"{base_model_name}.pth")
 
-    # 🔹 Save the entire model instead of just state_dict
+    # 🔹 If file exists, increment the filename
+    counter = 1
+    while os.path.exists(model_path):
+        model_path = os.path.join(models_dir, f"{base_model_name}_{counter}.pth")
+        counter += 1
+
+    # 🔹 Save the entire model
     torch.save(model, model_path)
 
     print(f"Saved best model to {model_path}")

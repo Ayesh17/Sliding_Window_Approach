@@ -10,7 +10,7 @@ from collections import Counter
 
 # Select Model Type & Dataset Variant
 model_type = "transformer"  # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
-dataset_variant = "Data_1000"  # Change to "Data_1000" for padded dataset
+dataset_variant = "Data_1000"  # options: Data, Data_1000
 
 
 
