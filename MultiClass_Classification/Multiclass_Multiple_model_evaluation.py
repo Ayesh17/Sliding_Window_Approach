@@ -12,7 +12,7 @@ from collections import Counter
 # Define Directory Paths
 confusion_matrices_folder = f"../Results/Confusion_Matrices"
 classification_reports_folder = f"../Results/Classification_Reports"
-training_log_file = "../results/results_log.csv"  # File containing model names and test files
+training_log_file = "../results/results_log_2.csv"  # File containing model names and test files
 
 # Ensure required directories exist
 os.makedirs(confusion_matrices_folder, exist_ok=True)

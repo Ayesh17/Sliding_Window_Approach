@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Select Model Type & Dataset Variant
-model_type = "bi_lstm"  # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
+model_type = "transformer"  # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
 dataset_variant = "Data_1000"  # Change to "Data_1000" for padded dataset
 
 
@@ -39,7 +39,7 @@ behavior_mapping = {
 }
 
 # Define Model Path & Load Model
-model_path = f"../Models/{model_type}_model_{dataset_variant}_2.pth"
+model_path = f"../Models/{model_type}_model_{dataset_variant}.pth"
 print("Model path:", model_path)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

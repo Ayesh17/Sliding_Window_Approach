@@ -1,65 +1,50 @@
 import subprocess
 import torch
 
-# List of training configurations
+
+# Define dataset-specific configurations
+dataset_specific_configs = {
+    "Data_1000": [
+        ("transformer", 0, 0.001, 16),
+        ("transformer", 0, 0.001, 64),
+        ("transformer", 0, 0.0001, 16),
+        ("transformer", 0.2, 0.001, 32),
+        ("transformer", 0, 0.001, 32),
+    ],
+    "Data": [
+        ("transformer", 0, 0.001, 16),
+        ("transformer", 0, 0.001, 64),
+        ("transformer", 0, 0.0001, 16),
+        ("transformer", 0.2, 0.001, 32),
+        ("transformer", 0, 0.001, 32),
+    ],
+    "Binary_Data_1000": [
+        ("transformer", 0, 0.001, 16),
+        ("transformer", 0, 0.0001, 16),
+        ("transformer", 0.2, 0.001, 16),
+        ("transformer", 0, 0.001, 32),
+        ("transformer", 0, 0.001, 64),
+    ],
+    "Binary_Data": [
+        ("transformer", 0, 0.001, 16),
+        ("transformer", 0, 0.0001, 16),
+        ("transformer", 0.2, 0.001, 16),
+        ("transformer", 0, 0.001, 32),
+        ("transformer", 0, 0.001, 64),
+    ],
+}
+
+# Generate training configurations
 training_configs = [
     {
         "dataset_variant": dataset_variant,
         "model_type": model_type,
-        "hidden_size": hidden_size,
         "dropout": dropout,
         "learning_rate": learning_rate,
         "batch_size": batch_size
     }
-    for dataset_variant in ["Binary_Data"]
-    # for dataset_variant in ["Data"]
-    for model_type, hidden_size, dropout, learning_rate, batch_size in [
-
-        # Bi-LSTM
-        ("bi_lstm", 64, 0.2, 0.001, 32),
-        ("bi_lstm", 128, 0, 0.001, 16),
-        ("bi_lstm", 128, 0.2, 0.001, 16),
-        ("bi_lstm", 64, 0, 0.001, 64),
-        ("bi_lstm", 64, 0.4, 0.001, 64),
-
-        # RNN
-        ("rnn", 128, 0, 0.0001, 32),
-        ("rnn", 128, 0.2, 0.0001, 16),
-        ("rnn", 128, 0.4, 0.0001, 64),
-        ("rnn", 128, 0.4, 0.0001, 32),
-        ("rnn", 128, 0.4, 0.0001, 16),
-
-        # Bi-RNN
-        ("bi_rnn", 128, 0.2, 0.0001, 16),
-        ("bi_rnn", 128, 0.2, 0.0001, 64),
-        ("bi_rnn", 128, 0.2, 0.0001, 32),
-        ("bi_rnn", 128, 0.4, 0.0001, 32),
-        ("bi_rnn", 128, 0.4, 0.0001, 16),
-
-        # GRU
-        ("gru", 128, 0, 0.0001, 32),
-        ("gru", 128, 0.4, 0.0001, 64),
-        ("gru", 128, 0.4, 0.0001, 16),
-        ("gru", 128, 0.4, 0.0001, 32),
-        ("gru", 128, 0.2, 0.0001, 32),
-
-        # # Bi-GRU
-        # ("bi_gru", 128, 0.2, 0.0001, 16),
-        # ("bi_gru", 128, 0, 0.0001, 16),
-        # ("bi_gru", 128, 0.4, 0.0001, 16),
-        # ("bi_gru", 128, 0.2, 0.0001, 32),
-        # ("bi_gru", 128, 0.4, 0.0001, 32),
-
-        # # LSTM
-        # ("lstm", 128, 0, 0.001, 64),
-        # ("lstm", 128, 0.4, 0.001, 16),
-        # ("lstm", 128, 0.2, 0.001, 64),
-        # ("lstm", 128, 0.2, 0.001, 32),
-        # ("lstm", 64, 0.2, 0.001, 64),
-
-
-
-    ]
+    for dataset_variant, model_configs in dataset_specific_configs.items()
+    for model_type, dropout, learning_rate, batch_size in model_configs
 ]
 
 
