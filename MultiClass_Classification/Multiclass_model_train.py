@@ -15,7 +15,7 @@ import re
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_type", type=str, required=True)
 parser.add_argument("--dataset_variant", type=str, required=True)
-# parser.add_argument("--hidden_size", type=int, required=True)
+parser.add_argument("--hidden_size", type=int, required=True)
 parser.add_argument("--dropout", type=float, required=True)
 parser.add_argument("--learning_rate", type=float, required=True)
 parser.add_argument("--batch_size", type=int, required=True)
@@ -24,7 +24,7 @@ args = parser.parse_args()
 # ✅ Set Hyperparameters from CLI Arguments
 model_type = args.model_type
 dataset_variant = args.dataset_variant
-# hidden_size = args.hidden_size
+hidden_size = args.hidden_size
 dropout = args.dropout
 learning_rate = args.learning_rate
 batch_size = args.batch_size
@@ -196,7 +196,7 @@ log_csv_path = os.path.join(models_dir, "training_log.csv")
 log_data = {
     "model_type": model_type,
     "dataset_variant": dataset_variant,
-    # "hidden_size": hidden_size,
+    "hidden_size": hidden_size,
     "dropout": dropout,
     "learning_rate": learning_rate,
     "batch_size": batch_size,

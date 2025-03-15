@@ -4,8 +4,8 @@ import shutil
 from collections import defaultdict
 
 # Set your folder paths
-source_folder = "../Datasets/Data/test_old"
-destination_folder = "../Datasets/Data/test"
+source_folder = "../Datasets/Binary_Data/test_old"
+destination_folder = "../Datasets/Binary_Data/test"
 
 # Ensure the destination folder exists
 os.makedirs(destination_folder, exist_ok=True)

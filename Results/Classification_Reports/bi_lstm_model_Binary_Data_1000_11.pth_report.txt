@@ -1,0 +1,8 @@
+              precision    recall  f1-score   support
+
+      benign       0.87      0.91      0.89     57684
+     hostile       0.86      0.83      0.84     43650
+
+   micro avg       0.87      0.87      0.87    101334
+   macro avg       0.87      0.87      0.87    101334
+weighted avg       0.87      0.87      0.87    101334

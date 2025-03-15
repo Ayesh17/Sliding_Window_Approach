@@ -10,25 +10,19 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Define Directory Paths
-confusion_matrices_folder = f"../Results/Confusion_Matrices"
-classification_reports_folder = f"../Results/Classification_Reports"
-training_log_file = "../results/results_log.csv"  # File containing model names and test files
+confusion_matrices_folder = "../Results/Confusion_Matrices"
+classification_reports_folder = "../Results/Classification_Reports"
+training_log_file = "../results/results_log_binary.csv"  # File containing model names and test files
 
 # Ensure required directories exist
 os.makedirs(confusion_matrices_folder, exist_ok=True)
 os.makedirs(classification_reports_folder, exist_ok=True)
 
-# Behavior Label Mapping
+# Behavior Label Mapping for Binary Classification
 behavior_mapping = {
     0: "benign",
-    1: "block",
-    2: "ram",
-    3: "cross",
-    4: "headon",
-    5: "herd",
-    6: "overtake"
+    1: "hostile",
 }
-
 
 # Load model names and dataset variants from the results log CSV file
 if not os.path.exists(training_log_file):
@@ -43,6 +37,7 @@ if not required_columns.issubset(training_log_df.columns):
 
 # Get unique model types
 model_types = training_log_df["model_name"].dropna().unique().tolist()
+
 
 # Function to get dataset_variant dynamically
 def get_dataset_variant(model_type):
@@ -88,8 +83,9 @@ def load_data_from_files(file_list, window_size=20, step_size=5):
 # Function to generate and save the confusion matrix
 def save_confusion_matrix(y_true, y_pred, model_type):
     cm = confusion_matrix(y_true, y_pred)
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=behavior_mapping.values(), yticklabels=behavior_mapping.values())
+    plt.figure(figsize=(6, 5))
+    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", xticklabels=behavior_mapping.values(),
+                yticklabels=behavior_mapping.values())
     plt.xlabel("Predicted")
     plt.ylabel("Actual")
     plt.title(f"Confusion Matrix - {model_type}")
@@ -152,7 +148,13 @@ def evaluate_model(model_type):
         for sequences, labels in test_loader:
             sequences = sequences.to(device)
             outputs = model(sequences)
-            predicted = torch.argmax(torch.softmax(outputs, dim=1), dim=1)
+
+            # Adjust prediction extraction for binary classification
+            if outputs.shape[1] == 1:
+                predicted = (torch.sigmoid(outputs) > 0.5).long().squeeze(1)
+            else:
+                predicted = torch.argmax(torch.softmax(outputs, dim=1), dim=1)
+
             all_preds.extend(predicted.cpu().numpy())
             all_labels.extend(labels.cpu().numpy())
 
@@ -168,25 +170,28 @@ def evaluate_model(model_type):
     recall_per_class = recall_score(all_labels, all_preds, average=None, zero_division=0)
     print("Recall per class:", recall_per_class)
 
-    # Save results to the results log
-    training_log_df.loc[training_log_df["model_name"] == model_type, "Accuracy"] = accuracy
-    training_log_df.loc[training_log_df["model_name"] == model_type, "Precision"] = precision
-    training_log_df.loc[training_log_df["model_name"] == model_type, "Recall"] = recall
-    training_log_df.loc[training_log_df["model_name"] == model_type, "F1 Score"] = f1
-
     # Save classification report
-    report = classification_report(all_labels, all_preds, target_names=list(behavior_mapping.values()), zero_division=0)
+    report = classification_report(all_labels, all_preds, labels=[0, 1], target_names=["benign", "hostile"], zero_division=0)
     report_path = os.path.join(classification_reports_folder, f"{model_type}_report.txt")
     with open(report_path, "w") as f:
         f.write(report)
 
     print(f"Results for {model_type.upper()} saved.")
 
+    # ✅ Ensure that metrics columns exist in DataFrame
+    for metric in ["Accuracy", "Precision", "Recall", "F1 Score"]:
+        if metric not in training_log_df.columns:
+            training_log_df[metric] = np.nan  # Create the column if missing
 
-# Run Evaluation for Each Model
+    # ✅ Update DataFrame with evaluation results
+    training_log_df.loc[training_log_df["model_name"] == model_type, "Accuracy"] = accuracy
+    training_log_df.loc[training_log_df["model_name"] == model_type, "Precision"] = precision
+    training_log_df.loc[training_log_df["model_name"] == model_type, "Recall"] = recall
+    training_log_df.loc[training_log_df["model_name"] == model_type, "F1 Score"] = f1
+
+# ✅ Save the updated results log **AFTER** all models are evaluated
 for model in model_types:
     evaluate_model(model)
 
-# Save updated results log
 training_log_df.to_csv(training_log_file, index=False)
 print(f"Updated results log saved to {training_log_file}")

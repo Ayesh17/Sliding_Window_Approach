@@ -13,7 +13,7 @@ import importlib
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 # ✅ Define dataset variant and model type
-dataset_variant = "Binary_Data"  # Options: "Data", "Data_1000", "Binary_Data", "Binary_Data_1000"
+dataset_variant = "Binary_Data_1000"  # Options: "Data", "Data_1000", "Binary_Data", "Binary_Data_1000"
 model_type = "transformer"  # Options: "lstm" or "transformer"
 
 # 🔹 Dynamically import the appropriate model
