@@ -12,7 +12,7 @@ training_configs = [
         "batch_size": batch_size
     }
     # for dataset_variant in ["Binary_Data_1000", "Binary_Data"]
-    for dataset_variant in ["Binary_Data_1000"] # options: "Data", "Data_1000"
+    for dataset_variant in ["Data"] # options: "Data", "Data_1000"
     for model_type, hidden_size, dropout, learning_rate, batch_size in [
         # # RNN
         # ("rnn", 128, 0, 0.0001, 32),
@@ -22,11 +22,14 @@ training_configs = [
         # ("rnn", 128, 0.4, 0.0001, 16),
         #
         # # Bi-RNN
-        ("bi_rnn", 128, 0.2, 0.0001, 16),
-        ("bi_rnn", 128, 0.2, 0.0001, 64),
+        # ("bi_rnn", 128, 0.2, 0.0001, 16),
+        # ("bi_rnn", 128, 0.2, 0.0001, 64),
         # ("bi_rnn", 128, 0.2, 0.0001, 32),
         # ("bi_rnn", 128, 0.4, 0.0001, 32),
-        # ("bi_rnn", 128, 0.4, 0.0001, 16),
+        ("bi_rnn", 128, 0.4, 0.0001, 16),
+        ("bi_rnn", 128, 0.4, 0.0001, 16),
+        ("bi_rnn", 128, 0.4, 0.0001, 16),
+        ("bi_rnn", 128, 0.4, 0.0001, 16),
         #
         # # GRU
         # ("gru", 128, 0, 0.0001, 32),
@@ -36,7 +39,7 @@ training_configs = [
         # ("gru", 128, 0.2, 0.0001, 32),
 
         # # Bi-GRU
-        ("bi_gru", 128, 0.2, 0.0001, 16),
+        # ("bi_gru", 128, 0.2, 0.0001, 16),
         # ("bi_gru", 128, 0, 0.0001, 16),
         # ("bi_gru", 128, 0.4, 0.0001, 16),
         # ("bi_gru", 128, 0.2, 0.0001, 32),
@@ -50,13 +53,13 @@ training_configs = [
         # ("lstm", 64, 0.2, 0.001, 64),
 
         # # Bi-LSTM
-        ("bi_lstm", 64, 0.2, 0.001, 32),
-        ("bi_lstm", 128, 0, 0.001, 16),
-        ("bi_lstm", 64, 0.2, 0.0001, 32),
+        # ("bi_lstm", 64, 0.2, 0.001, 32),
+        # ("bi_lstm", 128, 0, 0.001, 16),
+        # ("bi_lstm", 64, 0.2, 0.0001, 32),
         ("bi_lstm", 128, 0, 0.0001, 16),
-        # ("bi_lstm", 128, 0.2, 0.001, 16),
-        # ("bi_lstm", 64, 0, 0.001, 64),
-        # ("bi_lstm", 128, 0.4, 0.0001, 64),
+        ("bi_lstm", 128, 0.2, 0.001, 16),
+        ("bi_lstm", 64, 0, 0.001, 64),
+        ("bi_lstm", 128, 0.4, 0.0001, 64),
 
         # Transformer
         # ("transformer", None, 0, 0.001, 16),
