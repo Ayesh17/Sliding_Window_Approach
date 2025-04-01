@@ -11,6 +11,6 @@ Put all the train/val/test folders to Hmm_data folder
 Working Dataset -> HMM_data
 4) data_preprocessing_new.py
 5) Multiclass_model_train.py
-6) Mulyiclass_model_test.py
+6) Multiclass_model_test.py
 
 * check_file_length.py -> Check whether the updated files have 500 frames and 24 features

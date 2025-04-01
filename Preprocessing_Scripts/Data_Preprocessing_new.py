@@ -22,19 +22,20 @@ selected_columns = [
 
 
 # Mapping HII_ID values to new numeric labels
-# hii_id_to_label = {
-#     6: 2,  # RAM -> 2
-#     1: 0,  # BENIGN -> 0
-#     8: 1,  # BLOCK -> 1
-#     5: 3,  # CROSS -> 3
-#     7: 5,  # HERD -> 5
-#     4: 6,  # OVERTAKE -> 6
-#     3: 4   # HEADON -> 4
-# }
+hii_id_to_label = {
+    6: 2,  # RAM -> 2
+    1: 0,  # BENIGN -> 0
+    8: 1,  # BLOCK -> 1
+    5: 3,  # CROSS -> 3
+    7: 5,  # HERD -> 5
+    4: 6,  # OVERTAKE -> 6
+    3: 4   # HEADON -> 4
+}
 
 
 # Ensure output directories exist
-output_root_folder = "../Datasets/Binary_Data"
+# output_root_folder = "../Datasets/Binary_Data"
+output_root_folder = "../Datasets/HII_New_Data"
 os.makedirs(output_root_folder, exist_ok=True)
 train_output_folder = os.path.join(output_root_folder, "train")
 val_output_folder = os.path.join(output_root_folder, "validation")
@@ -44,7 +45,7 @@ os.makedirs(val_output_folder, exist_ok=True)
 os.makedirs(test_output_folder, exist_ok=True)
 
 # Path to root folder containing train, validation, and test subfolders
-root_folder = "../HMM_data"
+root_folder = "../HMM_data2"
 
 # Function to preprocess and filter files with < 200 rows
 def preprocess_and_filter(file_path):
@@ -55,7 +56,7 @@ def preprocess_and_filter(file_path):
         print(f"Read CSV file: {file_path} with shape: {df.shape}")
 
         # Check if the DataFrame has fewer than 150 rows
-        if len(df) < 150:
+        if len(df) < 100:
             print(f"File {file_path} has less than 150 rows. Skipping.")
             return None
 

@@ -5,7 +5,8 @@ import pandas as pd
 # Base directory and the behavior we are focusing on
 behavior = 'headon'
 # base_dir = "../HMM_train_data"
-base_dir = "../HMM_test_data"
+# base_dir = "../HMM_test_data"
+base_dir = "../DEC180W_updated"
 input_behavior_dir = os.path.join(base_dir, behavior, "scenario")
 intermediate_behavior_dir = os.path.join(base_dir, f"{behavior}_preprocessed", "scenario")
 
