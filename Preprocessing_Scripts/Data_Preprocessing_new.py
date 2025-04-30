@@ -45,7 +45,7 @@ os.makedirs(val_output_folder, exist_ok=True)
 os.makedirs(test_output_folder, exist_ok=True)
 
 # Path to root folder containing train, validation, and test subfolders
-root_folder = "../HMM_data2"
+root_folder = "../Oct_updated"
 
 # Function to preprocess and filter files with < 200 rows
 def preprocess_and_filter(file_path):

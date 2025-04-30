@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
 
 # Select Model Type & Dataset Folder
-model_type = "rnn" # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
+model_type = "transformer" # Options: rnn, bi_rnn, gru, bi_gru, lstm, bi_lstm, transformer
 csv_folder_path = "../Datasets/HII_New_Data/test"
 
 
@@ -17,8 +17,13 @@ csv_folder_path = "../Datasets/HII_New_Data/test"
 base_results_folder = "../Results"
 conf_matrix_folder = os.path.join(base_results_folder, "confusion_matrix_evaluation")
 report_folder = os.path.join(base_results_folder, "classification_report_evaluation")
+intent_graph_folder = os.path.join(base_results_folder, "intent_graphs")
+xy_plot_folder = os.path.join(base_results_folder, "xy_color_plots")
 os.makedirs(conf_matrix_folder, exist_ok=True)
 os.makedirs(report_folder, exist_ok=True)
+os.makedirs(intent_graph_folder, exist_ok=True)
+os.makedirs(xy_plot_folder, exist_ok=True)
+
 
 # Accuracy Log File
 accuracy_log_file = os.path.join(base_results_folder, "model_accuracies.csv")
@@ -26,7 +31,6 @@ accuracy_log_file = os.path.join(base_results_folder, "model_accuracies.csv")
 # Prepare to append results
 log_columns = ["filename", "model_type", "num_predictions", "accuracy (%)"]
 log_rows = []
-
 
 # Behavior Label Mapping
 behavior_mapping = {
@@ -43,7 +47,7 @@ all_class_indices = list(range(num_classes))
 behavior_labels = [behavior_mapping[i] for i in all_class_indices]
 
 # Load Model
-model_path = f"../Models/{model_type}_model_Data_6.pth"
+model_path = f"../Models/{model_type}_model_Data_1.pth"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = torch.load(model_path, map_location=device, weights_only=False)
@@ -77,6 +81,62 @@ def load_data_from_csv(csv_file, window_size=20, step_size=5):
     except Exception as e:
         print(f"Error processing {csv_file}: {e}")
     return np.array(sequences), np.array(labels)
+
+
+# intent over time graph generation
+def plot_intent_over_time(filename, all_preds, all_labels, behavior_labels, save_path):
+    import matplotlib.pyplot as plt
+    time_steps = range(len(all_preds))
+    plt.figure(figsize=(12, 4))
+    plt.plot(time_steps, all_labels, label="Ground Truth", color='black', linestyle='--', alpha=0.7)
+    plt.plot(time_steps, all_preds, label="Predicted", color='blue', alpha=0.8)
+    plt.yticks(ticks=range(len(behavior_labels)), labels=behavior_labels)
+    plt.xlabel("Time Step")
+    plt.ylabel("Intent")
+    plt.title(f"Intent over Time: {filename}")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(save_path)
+    plt.close()
+
+
+# color coded graph generation
+def plot_color_coded_xy(filename, df, all_preds, behavior_labels, save_path,
+                        lat_col="abs_b_r", lon_col="abs_r_b",
+                        window_size=20, step_size=5):
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    if lat_col not in df.columns or lon_col not in df.columns:
+        print(f"⚠️ Could not plot XY data for {filename} — missing {lat_col}/{lon_col} columns.")
+        return
+
+    try:
+        latitudes = df[lat_col].values
+        longitudes = df[lon_col].values
+        position_steps = [i + window_size // 2 for i in range(0, len(df) - window_size + 1, step_size)]
+
+        if len(position_steps) != len(all_preds):
+            print(f"⚠️ Mismatch between position steps and predictions for {filename}.")
+            return
+
+        plot_lats = latitudes[position_steps]
+        plot_lons = longitudes[position_steps]
+
+        plt.figure(figsize=(8, 8))
+        scatter = plt.scatter(plot_lons, plot_lats, c=all_preds, cmap="tab10", s=15)
+        cbar = plt.colorbar(scatter, ticks=range(len(behavior_labels)))
+        cbar.ax.set_yticklabels(behavior_labels)
+        plt.xlabel(lon_col)
+        plt.ylabel(lat_col)
+        plt.title(f"XY Color Plot: {filename}")
+        plt.tight_layout()
+        plt.savefig(save_path)
+        plt.close()
+    except Exception as e:
+        print(f"⚠️ Error generating XY plot for {filename}: {e}")
+
+
 
 # Loop through CSV files in the folder
 for filename in os.listdir(csv_folder_path):
@@ -143,6 +203,22 @@ for filename in os.listdir(csv_folder_path):
         report_filename = os.path.join(report_folder, f"classification_report_{filename.replace('.csv', '')}.txt")
         with open(report_filename, "w") as f:
             f.write(classification_report_text)
+
+
+        # Load original CSV again for plotting purposes
+        df_orig = pd.read_csv(file_path)
+
+        # Intent over Time Plot
+        intent_graph_path = os.path.join(intent_graph_folder,
+                                         f"intent_over_time_{filename.replace('.csv', '')}.png")
+        plot_intent_over_time(filename, all_preds, all_labels, behavior_labels, intent_graph_path)
+
+        # XY Color Plot
+        # XY Color Plot
+        xy_plot_path = os.path.join(xy_plot_folder, f"xy_color_plot_{filename.replace('.csv', '')}.png")
+        plot_color_coded_xy(filename, df_orig, all_preds, behavior_labels, xy_plot_path,
+                            lat_col="abs_b_r", lon_col="abs_r_b",
+                            window_size=20, step_size=5)
 
 # Save accuracy log
 df_log = pd.DataFrame(log_rows)

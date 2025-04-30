@@ -88,6 +88,7 @@ val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
 # Model Configuration
 input_size = X_train.shape[2]
+print("input_size : ", input_size)
 num_classes = len(np.unique(y_train))
 
 # Dynamically Import Model

@@ -10,8 +10,8 @@ def main():
     # output_dir = os.path.join("../HMM_train_data")
     # input_dir = os.path.join("../HMM_test_data_noise")
     # output_dir = os.path.join("../HMM_test_data")
-    input_dir = os.path.join("../DEC18OW")
-    output_dir = os.path.join("../DEC180W_updated")
+    input_dir = os.path.join("../Oct")
+    output_dir = os.path.join("../Oct_updated")
     restructure_folders(input_dir, output_dir)
 
 def restructure_folders(input_dir, output_dir):
