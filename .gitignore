@@ -1,6 +1,7 @@
 *.csv
 *.pkl
 *.zip
+*.png
 HMM_train_data_noise_preprocessed/*
 HMM_train_data_noise_preprocessed - Copy/*
 HMM_train_data_noise_preprocessed_mini/*
@@ -16,3 +17,4 @@ Dataset/*
 Datasets/*
 Original_Dataset/*
 Results/*
+Oct/*
